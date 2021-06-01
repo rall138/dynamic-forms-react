@@ -1,0 +1,55 @@
+form {
+    border-radius: 5px 5px 5px 5px;
+    position: relative;
+}
+
+form > div {
+    margin: 10px;
+}
+
+form > div > label {
+    font-family: monospace;
+    color: white;
+    display: inline-block;
+}
+
+form > div > input {
+    width: 100%;
+    height: 30px;
+    color: #2a9d8f;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    display: block;
+}
+
+form > button {
+    background-color: #2a9d8f;
+    margin-top: 20px;
+    height: 40px;
+    width: 80px;
+    color: white;
+    padding: 15;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+    position: absolute;
+    right: 5px;
+    bottom: -45px;
+    
+}
+
+.tabGroup{
+    margin-bottom: 2px;    
+}
+
+.tab{
+    background-color: #2a9d8f;
+    border-style: none;
+    margin-right: 5px;
+    height: 35px;   
+    min-width: 120px;
+    font-family: monospace;
+    font-size: 15px;
+    border-radius: 5px 5px 0px 0px;
+    color: white;
+}
