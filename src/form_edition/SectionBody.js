@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
-import {Table, Button} from 'react-bootstrap'
+import {Table, Button, Row} from 'react-bootstrap'
 import Fields from './Fields'
 import axios from 'axios'
 import Statics from '../HttpRoutes'
@@ -69,20 +69,17 @@ class TableRow extends React.Component {
 
   componentDidMount(){
     let state = {...this.state}
-    state.fields = this.props.row.fields
+    fields = props.row.fields
     this.setState(state)
   }
 
   render(){
     return(
       <tr style={styles.tableRow}>
-        {this.props.row.fields.map(field =>{
+        {props.row.fields.map(field =>{
           return(
             <td style={field != null ? styles.tableCell: styles.addTableCell}>
               {field != null ? 
-                <Fields field={field} handleClick={() => this.props.callbackClick(field.id, field.field_type)} 
-                handleDeleteField={(field_id) => this.props.handleDeleteField(field_id)}/> : 
-                <Button onClick={()=> this.props.handleAddField()} style={styles.addButtonStyle}>Add</Button>}
             </td>
           )
         })}
@@ -92,37 +89,35 @@ class TableRow extends React.Component {
 
 }
 
-class SectionBody extends React.Component {
+const SectionBody = (props) => {
 
-  constructor(props){
-    super(props)
-    this.state = {
-      column_number: 2,
-      fields: [],
-      rows: [],
-      deletedFields:[],
-    }
-  }
+  const [fields, setFields] = useState([])
+  const [rows, setRows] = useState([])
+  const [deletedFields, setDeletedFields] = useState([])
+  const [columns, setColumns] = useState(2)
+  const [message, setMessage] = useState('')
 
-  componentDidMount(){
-    axios.get(Statics.server_url+'forms/'+this.props.parent_id.form_id+
-    '/sections/'+this.props.parent_id.section_id+'/fields')
+  useEffect(()=>{
+    axios({
+      url:Statics.server_url+'forms/'+props.parent_id.form_id+'/sections/'+
+          props.parent_id.section_id+'/fields',
+      method: 'get',
+      data: ''
+    })
     .then(res =>{
-      let state = {...this.state}
-      state.fields = res.data
-      this.redifineRows(state.fields)
+      redefineRows(res.data)
     })
     .catch(error => {console.log(error)})
-  }
 
-  redifineRows = (fields) => {
+  }, [])
+
+  const redefineRows = (fields) => {
     
     fields = fields.filter(field =>(field.action !== 'delete'))
 
     let index = 0, row_count = 0, field_count = 0;
     let section_array = [] 
     let rows = []
-    const columns = this.state.column_number
 
     while(index < fields.length){
       if (field_count === columns){
@@ -144,54 +139,51 @@ class SectionBody extends React.Component {
     section_array.push(null)
     rows.push({id: row_count, fields: section_array})
 
-    let state = {...this.state}
-    state.fields = fields
-    state.rows = rows
-    this.setState(state)
+    setRows(rows)
+    setFields(fields)
     
   }
 
-  deleteField = (field_id) => {
-    let state = {...this.state}
-    let field = state.fields.filter(field =>(field.id === field_id))[0]
-    state.deletedFields.push({...field})
+  const deleteField = (field_id) => {
+    let field = fields.filter(field =>(field.id === field_id))[0]
     field.action = 'delete'
-    state.fields[state.fields.indexOf(field)] = field
-    this.redifineRows(state.fields)
-  }
 
-  addField = () => {
-    let state = {...this.state}
-    state.fields.push({id: this.state.fields.length > 0 ? this.state.fields[this.state.fields.length -1].id + 1
-    : 1, description:"New control", field_type:"text", action:'post', section_id:this.props.parent_id.section_id})
-    this.redifineRows(state.fields)
-  }
-
-  save = () => {
-    this.persisteChanges('delete')
-    this.persisteChanges('post')
-    this.persisteChanges('put')
-  }
-
-  persisteChanges(action){
-
-    let fieldsAddedOrChanged = action === 'delete' ? this.state.deletedFields : 
-      this.state.fields.filter(field => (field.action === action))
+    deletedFields.push({...field})
+    setDeletedFields(deletedFields)
     
-      let url = Statics.server_url+'forms/'+this.props.parent_id.form_id+
-      '/sections/'+this.props.parent_id.section_id+'/fields/'
+    fields[fields.indexOf(field)] = field
+    redefineRows(fields)
+  }
+
+  const addField = () => {
+    fields.push({id: fields.length > 0 ? fields[fields.length -1].id + 1
+    : 1, description:"New control", field_type:"text", action:'post', section_id:props.parent_id.section_id})
+
+    redefineRows(fields)
+  }
+
+  const save = () => {
+    persisteChanges('delete')
+    persisteChanges('post')
+    persisteChanges('put')
+  }
+
+  const persisteChanges = (action) =>{
+
+    let fieldsAddedOrChanged = action === 'delete' ? deletedFields : 
+      fields.filter(field => (field.action === action))
+    
+      let url = Statics.server_url+'forms/'+props.parent_id.form_id+
+      '/sections/'+props.parent_id.section_id+'/fields/'
 
     fieldsAddedOrChanged.forEach(field =>{
-
       axios({
         url: action === 'post' ? url : url+field.id, //Agregamos el id de field para put y delete
         method: action,
-        data: {field},
+        data: field,
       })
       .then(res => {
-        let state = {...this.state}
-        state.message = res.message
-        this.setState(state)
+        setMessage(res.message)
       })
       .catch(error => {
         console.log(error)
@@ -201,28 +193,26 @@ class SectionBody extends React.Component {
 
   }
 
-  render () {
-    return (
-      <React.Fragment>
-        <div style={styles.tableWrapper}>
-          <table>
-            <tbody>
-              {this.state.rows.map(row =>{
+  return (
+    <div style={styles.tableWrapper}>
+      <Container>
+          {rows.map(row =>{
+            <Row>
+              {row.fields.map(field =>{
                 return (
-                  <TableRow key={row.id} parent_id={this.props.parent_id}
-                    callbackClick={(field_id, field_type) => this.props.callbackClick(field_id, field_type)} 
-                    handleDeleteField={(field_id) => this.deleteField(field_id)}
-                    handleAddField={() => this.addField()} row={row} 
-                  />
+                  field.id >= 0 ?
+                  <Fields field={field} handleClick={() => props.callbackClick(field.id, field.field_type)} 
+                  handleDeleteField={(field_id) => props.handleDeleteField(field_id)}/> : 
+                  <Button onClick={()=> props.handleAddField()} style={styles.addButtonStyle}>Add</Button>
                 )
               })}
-            </tbody>
-          </table>
-          <div style={styles.anchoredBottom}><Button onClick={()=> this.save()}>Save</Button></div>
-        </div>
-      </React.Fragment>
-    );
-  }
+            </Row>
+          })}
+      </Container>
+      <div style={styles.anchoredBottom}><Button onClick={()=> save()}>Save</Button></div>
+    </div>
+  )
+
 }
 
 export default SectionBody
