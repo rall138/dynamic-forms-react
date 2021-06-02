@@ -1,3 +1,29 @@
 body{
     background-color: #264653;
+    padding: 10px;
+}
+
+.float-right{
+    position: absolute;
+    right: 0px;
+    bottom: -50px;
+}
+
+.float-right-top{
+    position: absolute;
+    right: 0px;
+    top: -30px;
+
+}
+
+.float-right-top > a {
+    color: white;
+}
+
+a.btn-danger {
+    background-color:#90be6d !important;
+}
+
+button.btn-danger {
+    background-color:#ee6c4d !important;
 }

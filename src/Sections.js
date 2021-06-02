@@ -63,28 +63,30 @@ const Sections = (props) => {
 
   const [rows, setRows] = useState([{id : "", sections: []}])
   const [sections, setSections] = useState([])
+  const [columns, setColumns] = useState(4)
 
   useEffect(()=>{
+
     axios({
       url: Statics.server_url+'/forms/'+props.form_id+'/sections',
       method: 'get',
       data: ''
     })
     .then(res => {
-      redifineRows(res.data)
+      redefineRows(res.data)
     })
     .catch(err =>{console.log(err)})
+    
   }, [])
 
   // Dividimos en 4 la cantidad de columnas que mostraremos osea las secciones por fila.
-  const redifineRows = (sections) => {
+  const redefineRows = (sections) => {
     
     sections = sections.filter(sec =>(sec.id >= 0))
 
     let index = 0, row_count = 0, section_count = 0;
     let section_array = [] 
     let rows = []
-    const columns = 4
 
     while(index < sections.length){
       if (section_count === columns){
@@ -124,7 +126,7 @@ const Sections = (props) => {
     .then(res=>{
       if (res.data.response === 'Ok'){
         sections.push({id: id, name: section_name})
-        redifineRows(sections)
+        redefineRows(sections)
       }
     })
     .catch(err => {console.log(err)})
@@ -147,7 +149,7 @@ const Sections = (props) => {
       .then(res =>{
         if(res.data.response === "Ok"){
           sections = sections.filter(section => (section.id !== section_id))
-          redifineRows(sections)
+          redefineRows(sections)
         }
       })
       .catch(err =>{
@@ -164,7 +166,7 @@ const Sections = (props) => {
           <Row style={{padding:10}} key={row.id}>
             {row.sections.map(section =>{
               return(
-                  <Col key={section.id} xs="2" s="1" lg="3" md="1">
+                  <Col key={section.id}>
                     <GridSection 
                       key={section.id}
                       section={section} 

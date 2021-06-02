@@ -1,26 +1,12 @@
 import React, { useState, useEffect } from "react"
-import PropTypes from "prop-types"
 import {Button, Alert, Form} from "react-bootstrap"
-import axios from "axios"
 import { useRouteMatch } from 'react-router-dom'
+import PropTypes from "prop-types"
+import axios from "axios"
+import Statics from './HttpRoutes'
 import './css/form.css'
 
-
-const styles = {
-  formBody:{
-    padding: 10,
-    margin: 20,
-    backgroundColor: "#f4a261",
-  },
-  formGroup:{
-    padding: 10,
-    margin: 10,
-  }
-}
-
-const server_url = "http://localhost:3000/"
 const transaction_mode = {new: "new", update: "update", delete: "delete", display: "display"}
-
 
 const DynamicForm = () => {
 
@@ -52,7 +38,7 @@ const DynamicForm = () => {
 
       if(retrive_data){
         axios({
-          url: server_url+`forms/${match.params.id}`,
+          url: Statics.server_url+`forms/${match.params.id}`,
           method: 'get',
           data: ''
         })
@@ -95,7 +81,7 @@ const DynamicForm = () => {
     }else{
 
       let formId = match.params.id
-      let preformedURL = server_url+'forms/'
+      let preformedURL = Statics.server_url+'forms/'
       let axiosBody = {url: '', method: '', data: null}
       let isError = false
       
@@ -149,7 +135,7 @@ const DynamicForm = () => {
       {variant !== '' ? 
         <Alert transition={false} variant={variant}>{message}</Alert> : null }
 
-      <Form style={styles.formBody} onSubmit={()=>handleSubmit}>
+      <Form onSubmit={()=>handleSubmit}>
 
         <Form.Group>
           <Form.Label>Title</Form.Label>
@@ -185,7 +171,7 @@ const DynamicForm = () => {
           </Form.Control>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="success" type="submit">
           Confirm
         </Button>
 

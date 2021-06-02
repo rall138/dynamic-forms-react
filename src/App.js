@@ -15,6 +15,9 @@ function App() {
         <Route path='/forms/:id/edit'>
           <DynamicFormTabs />
         </Route>
+        <Route path='/forms/new'>
+          <DynamicFormTabs />
+        </Route>
         <Route path='/forms/:form_id/sections/:id/edit'>
           <ToolsAndProperties />
         </Route>

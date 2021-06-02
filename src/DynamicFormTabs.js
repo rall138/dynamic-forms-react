@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useRouteMatch } from 'react-router-dom'
+import { useRouteMatch, Link } from 'react-router-dom'
 import DynamicForm from "./DynamicForm";
 import Sections from "./Sections"
 
@@ -17,6 +17,7 @@ const styles = {
     borderColor:"white",
     borderStyle:"dashed",
     padding:10,
+    position:"relative",
   },
   borderedBox60:{
     width: "60%",
@@ -24,6 +25,7 @@ const styles = {
     borderColor:"white",
     borderStyle:"dashed",
     padding:10,
+    position:"relative",
   },
 }
 
@@ -33,15 +35,24 @@ const DynamicFormTabs = (props) => {
   const [tabKey, setTabKey] = useState('Form')
 
   return (
-    <div style={{padding:20}} >
+    <div style={{padding:20, position:"relative"}} >
+
       <div className='tabGroup'>
           <button className='tab' title="Form" onClick={()=>setTabKey("Form")}>Form</button>
           <button className='tab' title="Sections" onClick={()=>setTabKey("Sections")}>Sections</button>
       </div>
+
+      
       <div style={tabKey === "Form"? styles.borderedBox60 : styles.borderedBox}>
+
+        <div className="float-right-top">
+            <Link to={'/forms/'}>Go back to forms</Link>
+        </div>
+
         {tabKey === "Form" ? <DynamicForm mode={'update'} form_id={match.params.id} /> : 
         <Sections form_id={match.params.id} />}
       </div>
+
     </div>
   )
 

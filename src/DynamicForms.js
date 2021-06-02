@@ -3,12 +3,9 @@ import axios from 'axios'
 import Constants from './HttpRoutes'
 import {Alert, Button, Table } from "react-bootstrap"
 import { Link } from 'react-router-dom'
+import './css/tablegrid.css'
 
 const styles = {
-  tableHeader: {
-      backgroundColor: "#3DB0D5",
-      color: "#ffffff",
-    }, 
   buttonContainer:{
       padding:5,
   },
@@ -65,18 +62,14 @@ const DynamicForms = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       {variant !== '' ? 
           <Alert transition={false} variant={variant}>{message}</Alert> : null }
 
-      <div style={styles.buttonContainer}>
-        <Button variant="success" href={Constants.server_url+'forms/new'}>Add</Button>
-      </div>
-
-      <Table striped hover bordered size="sm" variant="dark">
+      <Table striped hover borderless size="sm" variant="dark" style={{position:"relative"}}>
       
         <thead>
-          <tr style={styles.tableHeader}>
+          <tr>
             <th></th>
             <th></th>
             <th>Form title</th>
@@ -90,9 +83,9 @@ const DynamicForms = () => {
         <tbody>
 
           {forms.map(form => (
-            <tr style={styles.tableRow} key={form.id}>
-              <td><Button variant="danger" onClick={() => deleteItem(form.id)}>Delete</Button></td>
-              <td><Link to={'/forms/'+form.id+'/edit'}>Update</Link></td>
+            <tr key={form.id}>
+              <td><Button size='sm' variant="danger" onClick={() => deleteItem(form.id)}>Delete</Button></td>
+              <td><Button size='sm' variant="success" onClick={() => {window.location.replace('/forms/'+form.id+'/edit')}}>Update</Button></td>
               <td>{form.title}</td>
               <td>{form.subtitle}</td>
               <td>RLomez</td>
@@ -100,9 +93,16 @@ const DynamicForms = () => {
               <td>{form.updated_at_nice}</td>
             </tr>
           ))}
+          
 
         </tbody>
+
+        <div className="float-right">
+          <Button variant="success" href={'/forms/new'}>Create new form</Button>
+        </div>
+
       </Table>
+
     </div>
   )
 
