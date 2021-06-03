@@ -2,8 +2,8 @@ import React, {useState, useEffect} from "react"
 import PropTypes from "prop-types"
 import { Col, Container, Row } from "react-bootstrap"
 import axios from 'axios'
-import Statics from './HttpRoutes'
-import GridSection from "./sections/GridSection"
+import Statics from '../HttpRoutes'
+import GridSection from "./GridSection"
 
 const styles = {
   borderedBox:{
@@ -167,9 +167,10 @@ const Sections = (props) => {
             {row.sections.map(section =>{
               return(
                   <Col key={section.id}>
-                    <GridSection 
+                    <GridSection
+                      form_id={props.form_id}
                       key={section.id}
-                      section={section} 
+                      section={section}
                       handleAdd={() => addSection()}
                       handleRemove={() => removeSection(section.id)} 
                     />

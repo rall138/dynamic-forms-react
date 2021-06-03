@@ -13,7 +13,6 @@ body{
     position: absolute;
     right: 0px;
     top: -30px;
-
 }
 
 .float-right-top > a {
@@ -28,3 +27,24 @@ button.btn-danger {
     background-color:#ee6c4d !important;
 }
 
+.button-success-block{
+    background-color:#227348;
+    color: white;
+    font-size: 15px;
+    border: none;
+    width: 100%;
+}
+
+.rounded-button {
+    position:absolute;
+    right: -15px;
+    top: -15px;
+    display:block;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-color: #F44044;
+    border: 2px solid white;
+    color: white;
+    font-weight: 600;
+}

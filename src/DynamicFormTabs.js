@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useRouteMatch, Link } from 'react-router-dom'
 import DynamicForm from "./DynamicForm";
-import Sections from "./Sections"
+import Sections from "./sections/Sections"
 
 const styles = {
   tabStyle:{

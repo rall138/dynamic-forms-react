@@ -1,0 +1,44 @@
+.field{
+    background-color: #ee6c4d;
+    margin-bottom: 10px;
+    position:relative;
+    padding: 10px;
+}
+
+.field-title-container{
+    background-color: #3f4238;
+    padding: 5px;
+    margin-bottom:10px;
+}
+
+.field-title{
+    color:white;
+    font-size:14px;
+    font-family:monospace;
+}
+
+.field-data-type{
+    margin-top:10px;
+    font-size:12;
+    font-family:monospace;
+}
+
+.field-bordered-box{
+    border-width: 1px;
+    border-color: white;
+    border-style: dashed;
+    background-color: none;
+    padding: 10px;
+    height: 60px;
+    align-content: center;
+    position: relative;
+}
+
+.field-center-item{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }

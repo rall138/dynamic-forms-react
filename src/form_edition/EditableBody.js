@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react"
+import { useRouteMatch, Link } from 'react-router-dom'
 import PropTypes from "prop-types"
-import {Table, Button, Row} from 'react-bootstrap'
-import Fields from './Fields'
+import {Container, Row, Col} from 'react-bootstrap'
+import EditableFields from './EditableField'
 import axios from 'axios'
 import Statics from '../HttpRoutes'
 
 const styles = {
   tableWrapper:{
-    margin:15,
-    padding:10,
+    marginTop:50,
+    paddingTop: 20,
+    paddingBottom: 10,
+    paddingRight: 10,
+    paddingLeft: 10,
     borderWidth:1,
     borderStyle:'dashed',
     borderColor:'white',
@@ -53,54 +57,18 @@ const styles = {
   },
 }
 
-/**
- * El concepto de TableRow viene dado por la necesidad de crear formulario tabulares
- * con filas y cantidad de columnas a selección del usuario; cada fila engloba un conjunto
- * de Fields o campos y también posicionadores.
- */
-class TableRow extends React.Component {
-
-  constructor(props){
-    super(props)
-    this.state = {
-      fields:[],
-    }
-  }
-
-  componentDidMount(){
-    let state = {...this.state}
-    fields = props.row.fields
-    this.setState(state)
-  }
-
-  render(){
-    return(
-      <tr style={styles.tableRow}>
-        {props.row.fields.map(field =>{
-          return(
-            <td style={field != null ? styles.tableCell: styles.addTableCell}>
-              {field != null ? 
-            </td>
-          )
-        })}
-      </tr>
-    )
-  }
-
-}
-
 const SectionBody = (props) => {
 
-  const [fields, setFields] = useState([])
+  const [fields, setEditableFields] = useState([])
   const [rows, setRows] = useState([])
-  const [deletedFields, setDeletedFields] = useState([])
+  const [deletedEditableFields, setDeletedEditableFields] = useState([])
   const [columns, setColumns] = useState(2)
   const [message, setMessage] = useState('')
+  const match = useRouteMatch()
 
   useEffect(()=>{
     axios({
-      url:Statics.server_url+'forms/'+props.parent_id.form_id+'/sections/'+
-          props.parent_id.section_id+'/fields',
+      url:Statics.server_url+`forms/${match.params.form_id}/sections/${match.params.id}/fields`,
       method: 'get',
       data: ''
     })
@@ -136,11 +104,12 @@ const SectionBody = (props) => {
       section_array = []
     }
 
-    section_array.push(null)
+    section_array.push({id: -1, description:''})
     rows.push({id: row_count, fields: section_array})
 
+    console.log(JSON.stringify(rows))
     setRows(rows)
-    setFields(fields)
+    setEditableFields(fields)
     
   }
 
@@ -148,8 +117,8 @@ const SectionBody = (props) => {
     let field = fields.filter(field =>(field.id === field_id))[0]
     field.action = 'delete'
 
-    deletedFields.push({...field})
-    setDeletedFields(deletedFields)
+    deletedEditableFields.push({...field})
+    setDeletedEditableFields(deletedEditableFields)
     
     fields[fields.indexOf(field)] = field
     redefineRows(fields)
@@ -157,7 +126,7 @@ const SectionBody = (props) => {
 
   const addField = () => {
     fields.push({id: fields.length > 0 ? fields[fields.length -1].id + 1
-    : 1, description:"New control", field_type:"text", action:'post', section_id:props.parent_id.section_id})
+    : 1, description:"New control", field_type:"text", action:'post', section_id: match.params.id})
 
     redefineRows(fields)
   }
@@ -170,11 +139,10 @@ const SectionBody = (props) => {
 
   const persisteChanges = (action) =>{
 
-    let fieldsAddedOrChanged = action === 'delete' ? deletedFields : 
+    let fieldsAddedOrChanged = action === 'delete' ? deletedEditableFields : 
       fields.filter(field => (field.action === action))
     
-      let url = Statics.server_url+'forms/'+props.parent_id.form_id+
-      '/sections/'+props.parent_id.section_id+'/fields/'
+      let url = Statics.server_url+`forms/${match.params.form_id}/sections/${match.params.id}/fields/`
 
     fieldsAddedOrChanged.forEach(field =>{
       axios({
@@ -195,21 +163,29 @@ const SectionBody = (props) => {
 
   return (
     <div style={styles.tableWrapper}>
+
+      <div className="float-right-top">
+          <Link to={`/forms/${match.params.form_id}/edit`}>Go back to sections</Link>
+      </div>
+
       <Container>
           {rows.map(row =>{
-            <Row>
-              {row.fields.map(field =>{
-                return (
-                  field.id >= 0 ?
-                  <Fields field={field} handleClick={() => props.callbackClick(field.id, field.field_type)} 
-                  handleDeleteField={(field_id) => props.handleDeleteField(field_id)}/> : 
-                  <Button onClick={()=> props.handleAddField()} style={styles.addButtonStyle}>Add</Button>
-                )
-              })}
-            </Row>
+            return(
+              <Row>
+                {row.fields.map(field =>{
+                  return (
+                    <Col>
+                      <EditableFields field={field} 
+                      handleAdd={() => addField()}
+                      handleClick={() => props.callbackClick(field.id, field.field_type)} 
+                      handleDeleteField={(field_id) => deleteField(field_id)}/>
+                    </Col>
+                  )
+                })}
+              </Row>
+            )
           })}
       </Container>
-      <div style={styles.anchoredBottom}><Button onClick={()=> save()}>Save</Button></div>
     </div>
   )
 
