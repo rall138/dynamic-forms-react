@@ -6,7 +6,7 @@ body{
 .float-right{
     position: absolute;
     right: 0px;
-    bottom: -50px;
+    bottom: -35px;
 }
 
 .float-right-top{
@@ -33,6 +33,10 @@ button.btn-danger {
     font-size: 15px;
     border: none;
     width: 100%;
+}
+
+.absolute-position{
+    position: absolute;
 }
 
 .rounded-button {

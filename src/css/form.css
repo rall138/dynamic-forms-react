@@ -40,6 +40,16 @@ form > button {
     border-radius: 5px 5px 5px 5px;
 }
 
+.modal-form{
+    padding: 0px;
+    margin: 0px;
+    background-color: white;
+}
+
+.modal-form > div > label{
+    color: black;
+}
+
 .tabGroup{
     margin-bottom: 2px;    
 }

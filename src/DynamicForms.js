@@ -1,9 +1,8 @@
 import {React, useState, useEffect} from "react"
 import axios from 'axios'
-import Constants from './HttpRoutes'
 import {Alert, Button, Table } from "react-bootstrap"
-import { Link } from 'react-router-dom'
 import './css/tablegrid.css'
+import Constantes from './files/constantes.json'
 
 const styles = {
   buttonContainer:{
@@ -22,8 +21,9 @@ const DynamicForms = () => {
 
   useEffect(() => {
  
+    console.log(Constantes.SERVER_URL+'forms/')
     axios({
-      url: Constants.server_url+'forms/',
+      url: Constantes.SERVER_URL+'forms/',
       method: 'get',
       data:''
     })
@@ -33,8 +33,7 @@ const DynamicForms = () => {
         form.updated_at_nice = form.updated_at.slice(0, 10)+' '+form.updated_at.slice(11, 16)
       });
       setForms(res.data)
-    }
-    ).catch(error => (console.log(error)))
+    }).catch(error => (console.log(error)))
 
   }, [])
 
@@ -43,7 +42,7 @@ const DynamicForms = () => {
     if (window.onfirm("You're just about deleting this form, are you sure?")){
 
       axios({
-        url: Constants.server_url+'forms/'+id,
+        url: Constantes.SERVER_URL+'forms/'+id,
         method: 'delete',
         data: ''
       })
@@ -66,42 +65,45 @@ const DynamicForms = () => {
       {variant !== '' ? 
           <Alert transition={false} variant={variant}>{message}</Alert> : null }
 
-      <Table striped hover borderless size="sm" variant="dark" style={{position:"relative"}}>
-      
-        <thead>
-          <tr>
-            <th></th>
-            <th></th>
-            <th>Form title</th>
-            <th>Form Subtitle</th>
-            <th>Created by</th>
-            <th>Created at</th>
-            <th>Last time updated</th>
-          </tr>
-        </thead>
+      <div className="absolute-position">
 
-        <tbody>
-
-          {forms.map(form => (
-            <tr key={form.id}>
-              <td><Button size='sm' variant="danger" onClick={() => deleteItem(form.id)}>Delete</Button></td>
-              <td><Button size='sm' variant="success" onClick={() => {window.location.replace('/forms/'+form.id+'/edit')}}>Update</Button></td>
-              <td>{form.title}</td>
-              <td>{form.subtitle}</td>
-              <td>RLomez</td>
-              <td>{form.created_at_nice}</td>
-              <td>{form.updated_at_nice}</td>
+        <Table striped hover borderless size="sm" variant="dark" style={{position:"relative"}}>
+        
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th>Form title</th>
+              <th>Form Subtitle</th>
+              <th>Created by</th>
+              <th>Created at</th>
+              <th>Last time updated</th>
             </tr>
-          ))}
-          
+          </thead>
 
-        </tbody>
+          <tbody>
+
+            {forms.map(form => (
+              <tr key={form.id}>
+                <td><Button size='sm' variant="danger" onClick={() => deleteItem(form.id)}>Delete</Button></td>
+                <td><Button size='sm' variant="success" onClick={() => {window.location.replace('/forms/'+form.id+'/edit')}}>Update</Button></td>
+                <td>{form.title}</td>
+                <td>{form.subtitle}</td>
+                <td>RLomez</td>
+                <td>{form.created_at_nice}</td>
+                <td>{form.updated_at_nice}</td>
+              </tr>
+            ))}
+            
+          </tbody>
+
+        </Table>
 
         <div className="float-right">
           <Button variant="success" href={'/forms/new'}>Create new form</Button>
         </div>
 
-      </Table>
+      </div>
 
     </div>
   )

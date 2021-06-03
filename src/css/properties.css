@@ -1,0 +1,5 @@
+form > div > label {
+    font-family: monospace;
+    color: black;
+    display: inline-block;
+}

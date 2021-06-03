@@ -4,7 +4,8 @@ import PropTypes from "prop-types"
 import {Container, Row, Col} from 'react-bootstrap'
 import EditableFields from './EditableField'
 import axios from 'axios'
-import Statics from '../HttpRoutes'
+import Constantes from '../files/constantes.json'
+import Properties from "./Properties"
 
 const styles = {
   tableWrapper:{
@@ -64,11 +65,12 @@ const SectionBody = (props) => {
   const [deletedEditableFields, setDeletedEditableFields] = useState([])
   const [columns, setColumns] = useState(2)
   const [message, setMessage] = useState('')
+  const [modalShow, setModalShow] = useState(false)
   const match = useRouteMatch()
 
   useEffect(()=>{
     axios({
-      url:Statics.server_url+`forms/${match.params.form_id}/sections/${match.params.id}/fields`,
+      url:Constantes.SERVER_URL+`forms/${match.params.form_id}/sections/${match.params.id}/fields`,
       method: 'get',
       data: ''
     })
@@ -142,7 +144,7 @@ const SectionBody = (props) => {
     let fieldsAddedOrChanged = action === 'delete' ? deletedEditableFields : 
       fields.filter(field => (field.action === action))
     
-      let url = Statics.server_url+`forms/${match.params.form_id}/sections/${match.params.id}/fields/`
+      let url = Constantes.SERVER_URL+`forms/${match.params.form_id}/sections/${match.params.id}/fields/`
 
     fieldsAddedOrChanged.forEach(field =>{
       axios({
@@ -164,6 +166,8 @@ const SectionBody = (props) => {
   return (
     <div style={styles.tableWrapper}>
 
+      <Properties show={modalShow} onHide={() => setModalShow(false)} />      
+
       <div className="float-right-top">
           <Link to={`/forms/${match.params.form_id}/edit`}>Go back to sections</Link>
       </div>
@@ -171,11 +175,13 @@ const SectionBody = (props) => {
       <Container>
           {rows.map(row =>{
             return(
-              <Row>
+              <Row key={row.id}>
                 {row.fields.map(field =>{
                   return (
-                    <Col>
-                      <EditableFields field={field} 
+                    <Col key={field.id}>
+                      <EditableFields 
+                      key={field.id}
+                      field={field} 
                       handleAdd={() => addField()}
                       handleClick={() => props.callbackClick(field.id, field.field_type)} 
                       handleDeleteField={(field_id) => deleteField(field_id)}/>

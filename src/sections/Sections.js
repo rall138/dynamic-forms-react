@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react"
 import PropTypes from "prop-types"
 import { Col, Container, Row } from "react-bootstrap"
 import axios from 'axios'
-import Statics from '../HttpRoutes'
+import Constantes from '../files/constantes.json'
 import GridSection from "./GridSection"
 
 const styles = {
@@ -68,7 +68,7 @@ const Sections = (props) => {
   useEffect(()=>{
 
     axios({
-      url: Statics.server_url+'/forms/'+props.form_id+'/sections',
+      url: Constantes.SERVER_URL+'/forms/'+props.form_id+'/sections',
       method: 'get',
       data: ''
     })
@@ -119,7 +119,7 @@ const Sections = (props) => {
     let section = {name: section_name, order: 0, form_id: props.form_id, columns: 1}
 
     axios({
-      url: Statics.server_url+'forms/'+props.form_id+'/sections/',
+      url: Constantes.SERVER_URL+'forms/'+props.form_id+'/sections/',
       method: 'post',
       data: section
     })
@@ -135,14 +135,14 @@ const Sections = (props) => {
 
   /*
   updateSection = (section_id) => {
-    window.location.replace(Statics.server_url+'forms/'+props.form_id+'/sections/'+section_id+'/edit')
+    window.location.replace(Constantes.SERVER_URL+'forms/'+props.form_id+'/sections/'+section_id+'/edit')
   }*/
 
   const removeSection = (section_id) => {
     let confirmation = window.confirm("You're just about removing this section\n are you sure? ")
     if (confirmation){
       axios({
-        url: Statics.server_url+'forms/'+props.form_id+'/sections/'+section_id,
+        url: Constantes.SERVER_URL+'forms/'+props.form_id+'/sections/'+section_id,
         method: 'delete',
         data: ''
       })

@@ -1,15 +1,16 @@
 import React, {useState} from "react"
-import ToolBar from './form_edition/ToolBar'
-import Properties from './form_edition/Properties'
 import EditableBody from './form_edition/EditableBody'
 import {Container, Row, Col} from 'react-bootstrap'
+import Properties from "./form_edition/Properties"
 
 const ToolsAndProperties = (props) =>  {
 
   const [field, setField] = useState({id:0, type:''})
+  const [showModal, setShowModal] = useState(false)
 
   const handleClickOnField = (field_id, field_type) => {
     setField({id: field_id, type: field_type})
+    setShowModal(true)
   }
 
   return (
@@ -24,6 +25,11 @@ const ToolsAndProperties = (props) =>  {
         <Col lg="2">
         </Col>
       </Row>
+
+      <Properties
+        show={showModal}
+        onHide={() => setShowModal(false)} />
+
     </Container>
   )
 }

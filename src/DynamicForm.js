@@ -3,7 +3,7 @@ import {Button, Alert, Form} from "react-bootstrap"
 import { useRouteMatch } from 'react-router-dom'
 import PropTypes from "prop-types"
 import axios from "axios"
-import Statics from './HttpRoutes'
+import Constantes from './files/constantes.json'
 import './css/form.css'
 
 const transaction_mode = {new: "new", update: "update", delete: "delete", display: "display"}
@@ -38,7 +38,7 @@ const DynamicForm = () => {
 
       if(retrive_data){
         axios({
-          url: Statics.server_url+`forms/${match.params.id}`,
+          url: Constantes.SERVER_URL+`forms/${match.params.id}`,
           method: 'get',
           data: ''
         })
@@ -81,7 +81,7 @@ const DynamicForm = () => {
     }else{
 
       let formId = match.params.id
-      let preformedURL = Statics.server_url+'forms/'
+      let preformedURL = Constantes.SERVER_URL+'forms/'
       let axiosBody = {url: '', method: '', data: null}
       let isError = false
       

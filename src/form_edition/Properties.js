@@ -1,64 +1,96 @@
-import React from "react"
-import PropTypes from "prop-types"
-import {Table, Button} from 'react-bootstrap'
-import fs from 'fs'
+import React, { useState, useEffect } from "react"
+import {Modal, Button, Form} from 'react-bootstrap'
 import fieldJsonProperties from '../files/field_properties.json'
+import Constantes from '../files/constantes.json'
 
-const styles={
-  title:{
-    fontSize:16,
-    fontFamily:'monospace',
-    color:'none',
-  },
-  bodyStyle:{
-    backgroundColor:'#ede0d4',
-    verticalAlign:'top',
-  },
-}
-
-class Properties extends React.Component {
+const Properties = (props) => {
   
-  constructor(props){
-    super(props)
-    this.state={
-      properties:'',
-      propertiesIterable: [],
-    }
-  }
+  const [iterableProps, setIterableProps] = useState([])
+  const [properties, setProperties] = useState(fieldJsonProperties)
+  const [form, setForm] = useState('')
 
-  componentDidMount(){
-    this.getProperties(fieldJsonProperties)
-  }
-
-  getProperties = (propertiesFile) =>{
-    let state = {...this.state}
-    state.properties = propertiesFile
+  useEffect(() => {
     
     // Normalizamos el uso para que sea mas facil a la hora de renderizar el componente.
-    for (const [key, value] of Object.entries(state.properties)){
-      state.propertiesIterable.push({name:key, value:value})
+    console.log(JSON.stringify(properties))
+    for (const [key, value] of Object.entries(properties)){
+      iterableProps.push({name: key, value: value})
     }
-    this.setState(state)
+    setIterableProps(iterableProps)
+
+  },[])
+
+
+  const handleChange = event =>{
+    
+    // En el caso del insert tenemos que eliminar el id, sino generamos conflicto al insertar objeto con id 0
+    if (props.mode === Constantes.TRANSACTION_MODE.NEW){
+      setForm({
+        title: event.target.name === "form_title" ? event.target.value : form.title,
+        subtitle: event.target.name === "form_subtitle" ? event.target.value : form.subtitle,
+        description: event.target.name === "form_description" ? event.target.value : form.description,
+      })
+    }else{
+      setForm({
+        id: form.id,
+        title: event.target.name === "form_title" ? event.target.value : form.title,
+        subtitle: event.target.name === "form_subtitle" ? event.target.value : form.subtitle,
+        description: event.target.name === "form_description" ? event.target.value : form.description,
+      })
+    }
+    
   }
 
-  render () {
-    
-    return (
-      <React.Fragment>
-        <div style={styles.bodyStyle}>
-          <div style={styles.title}>Properties</div>
-          <Table>
-            <body>
-              {this.state.propertiesIterable.map(prop =>{
-                return (<tr><td>{prop.name}</td><td>{prop.value}</td></tr>)
-              })}
-            </body>
-          </Table>
-          <Button>Save</Button>
-        </div>
-      </React.Fragment>
-    );
+  const handleSubmit = event => {
+
+    event.preventDefault();
+
+    const form_control = event.currentTarget;
+    if (form_control.checkValidity() === false){
+      event.stopPropagation();
+    }else{
+
+    }
+
   }
+
+  return (
+    <Modal
+      {...props}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered >
+      <Modal.Header>
+        <Modal.Title id="contained-modal-title-vcenter">
+            Field properties
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        
+        <Form className="modal-form" onSubmit={()=>handleSubmit}>
+          {iterableProps.map(prop =>{
+            return(
+              <Form.Group>
+                <Form.Label>{prop.name}</Form.Label>
+                <Form.Control onChange={()=>handleChange}
+                  name = {prop.name}
+                  id = {prop.name}
+                  required 
+                  type = "text" 
+                  placeholder = "Insert a title"
+                  value = {form.title}>
+                </Form.Control>
+              </Form.Group>
+            )
+          })}
+        </Form>
+
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+        <Button variant="success" type="submit">Confirm</Button>
+      </Modal.Footer>
+    </Modal>
+  )
 }
 
 export default Properties
