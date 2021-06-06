@@ -1,4 +1,26 @@
-{
-    "description": "",
-    "field_type": ""
-}
+[
+    {
+        "field_name": "description",
+        "pretty_name": "Name",
+        "field_type": "text",
+        "control_type": "text",
+        "options": [],
+        "field_required": true
+    },
+    {
+        "field_name": "field_type",
+        "pretty_name": "Type",
+        "field_type": "text",
+        "control_type": "option",
+        "options": ["text", "long_text", "numeric", "date", "blob"],
+        "field_required": true
+    },
+    {
+        "field_name": "field_required",
+        "pretty_name": "Required",
+        "field_type": "boolean",
+        "control_type": "checkbox",
+        "options": [],
+        "field_required": true        
+    }
+]

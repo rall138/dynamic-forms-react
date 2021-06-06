@@ -5,21 +5,8 @@ import Constantes from '../files/constantes.json'
 
 const Properties = (props) => {
   
-  const [iterableProps, setIterableProps] = useState([])
   const [properties, setProperties] = useState(fieldJsonProperties)
   const [form, setForm] = useState('')
-
-  useEffect(() => {
-    
-    // Normalizamos el uso para que sea mas facil a la hora de renderizar el componente.
-    console.log(JSON.stringify(properties))
-    for (const [key, value] of Object.entries(properties)){
-      iterableProps.push({name: key, value: value})
-    }
-    setIterableProps(iterableProps)
-
-  },[])
-
 
   const handleChange = event =>{
     
@@ -67,18 +54,45 @@ const Properties = (props) => {
       <Modal.Body>
         
         <Form className="modal-form" onSubmit={()=>handleSubmit}>
-          {iterableProps.map(prop =>{
+          {properties.map(prop =>{
             return(
               <Form.Group>
-                <Form.Label>{prop.name}</Form.Label>
-                <Form.Control onChange={()=>handleChange}
-                  name = {prop.name}
-                  id = {prop.name}
-                  required 
-                  type = "text" 
-                  placeholder = "Insert a title"
-                  value = {form.title}>
-                </Form.Control>
+
+                {prop.control_type !== "checkbox" ? 
+                    <Form.Label>{prop.pretty_name}</Form.Label>: ''
+                }
+
+                { prop.control_type === "text" ?
+                    <Form.Control onChange={()=>handleChange}
+                          name = {prop.name}
+                          id = {prop.name}
+                          required = {prop.field_required} 
+                          type = "text" 
+                          placeholder = "Insert a title"
+                          value = {form.title}>
+                    </Form.Control> : ''}
+                  
+                  { prop.control_type === "option" ?
+                    <Form.Control as="select" onChange={()=>handleChange}
+                      name = {prop.name}
+                      id = {prop.name}
+                      required = {prop.field_required} 
+                      type = "text" 
+                      placeholder = "Insert a title"
+                      value = {form.title}>
+                        {prop.options.map(opt => {
+                            return(<option>{opt}</option>)
+                        })}
+                    </Form.Control> : ''}                
+
+                  { prop.control_type === "checkbox" ?
+                    <Form.Check onChange={()=>handleChange}
+                      name = {prop.name}
+                      id = {prop.name}
+                      required = {prop.field_required} 
+                      label = {prop.pretty_name} />
+                    : ''}
+
               </Form.Group>
             )
           })}
