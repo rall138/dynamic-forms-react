@@ -2,15 +2,18 @@ import React, {useState} from "react"
 import EditableBody from './form_edition/EditableBody'
 import {Container, Row, Col} from 'react-bootstrap'
 import Properties from "./form_edition/Properties"
+import { useRouteMatch } from 'react-router-dom'
 
 const ToolsAndProperties = (props) =>  {
 
-  const [field, setField] = useState({id:0, type:''})
+  const match = useRouteMatch()
+  const [field, setField] = useState("")
   const [showModal, setShowModal] = useState(false)
+  const [parentId, setParentId] = useState({form_id: match.params.form_id, section_id: match.params.id})
 
-  const handleClickOnField = (field_id, field_type) => {
-    setField({id: field_id, type: field_type})
+  const handleClickOnField = (field) => {
     setShowModal(true)
+    setField(field)
   }
 
   return (
@@ -19,14 +22,17 @@ const ToolsAndProperties = (props) =>  {
         <Col lg="2"></Col>
         <Col lg="8">
           <EditableBody 
-            callbackClick={(field_id, field_type)=>handleClickOnField(field_id, field_type)} 
-            parent_id={{form_id: props.form_id, section_id: props.section_id}} />
+            callbackClick={(field)=>handleClickOnField(field)} 
+            parent_id={parentId} />
         </Col>
         <Col lg="2">
         </Col>
       </Row>
 
       <Properties
+        field_id={field.id}
+        parent_id={parentId}
+        properties={JSON.stringify(field)}
         show={showModal}
         onHide={() => setShowModal(false)} />
 

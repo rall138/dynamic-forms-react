@@ -109,7 +109,6 @@ const SectionBody = (props) => {
     section_array.push({id: -1, description:''})
     rows.push({id: row_count, fields: section_array})
 
-    console.log(JSON.stringify(rows))
     setRows(rows)
     setEditableFields(fields)
     
@@ -183,7 +182,7 @@ const SectionBody = (props) => {
                       key={field.id}
                       field={field} 
                       handleAdd={() => addField()}
-                      handleClick={() => props.callbackClick(field.id, field.field_type)} 
+                      handleClick={() => props.callbackClick(field)} 
                       handleDeleteField={(field_id) => deleteField(field_id)}/>
                     </Col>
                   )

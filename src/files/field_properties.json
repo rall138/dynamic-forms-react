@@ -1,26 +1,56 @@
 [
     {
+        "field_name": "id",
+        "pretty_name": "Id",
+        "field_type": "numeric",
+        "control_type": "text",
+        "options": [],
+        "field_required": true,
+        "visible": false
+    },    
+    {
         "field_name": "description",
         "pretty_name": "Name",
         "field_type": "text",
         "control_type": "text",
         "options": [],
-        "field_required": true
+        "field_required": true,
+        "visible": true
     },
+    {
+        "field_name": "pretty_name",
+        "pretty_name": "Pretty Name",
+        "field_type": "text",
+        "control_type": "text",
+        "options": [],
+        "field_required": true,
+        "visible": true
+    },    
     {
         "field_name": "field_type",
         "pretty_name": "Type",
         "field_type": "text",
         "control_type": "option",
         "options": ["text", "long_text", "numeric", "date", "blob"],
-        "field_required": true
+        "field_required": true,
+        "visible": true
     },
+    {
+        "field_name": "control_type",
+        "pretty_name": "Control Type",
+        "field_type": "text",
+        "control_type": "option",
+        "options": ["input field", "numeric range", "calendar", "blob"],
+        "field_required": false,
+        "visible": true
+    },    
     {
         "field_name": "field_required",
         "pretty_name": "Required",
         "field_type": "boolean",
         "control_type": "checkbox",
         "options": [],
-        "field_required": true        
+        "field_required": false,
+        "visible": true
     }
 ]
