@@ -30,9 +30,8 @@ const ToolsAndProperties = (props) =>  {
       </Row>
 
       <Properties
-        field_id={field.id}
         parent_id={parentId}
-        properties={JSON.stringify(field)}
+        field={field}
         show={showModal}
         onHide={() => setShowModal(false)} />
 

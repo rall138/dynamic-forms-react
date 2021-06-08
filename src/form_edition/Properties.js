@@ -9,32 +9,63 @@ const Properties = (props) => {
   const [properties, setProperties] = useState(fieldJsonProperties)
   const [field, setField] = useState('')
 
+  /* 
+    * for(let property_name in props.field) #solo retorna los nombres
+    * --> id
+    * --> name
+    * --> pretty_name
+    *
+    * Field 
+    *   id: 2, 
+    *   description: "New control", 
+    *   field_type: "text", 
+    *   created_at: "2021-05-26 16:30:52.266609000 +0000", 
+    *   updated_at: "2021-05-26 16:30:52.266609000 +0000", 
+    *   section_id: 1, control_type: nil, 
+    *   pretty_name: nil, 
+    *   field_required: true, 
+    *   options: "[]", 
+    *   value: nil
+  */
+
   useEffect(() => {
-    for (let db_prop in props.field){
-      properties[properties.indexOf(properties.filter(prop => prop.name === db_prop.name))] = db_prop.value
+
+    let index = -1
+    for(let property_name in props.field){
+      index = returnPropertyIndex(property_name)
+      if (index > -1){
+        properties[index].value = props.field[property_name]
+      }
     }
     setProperties(properties)
   }, [props])
 
-  const handleChange = (propName) =>{
 
-    console.log(propName)
-    const input = document.getElementById(propName);
-    const propValue = input.value
+    /* 
+     * Retornamos el indice de la propiedad que esta dentro de properties
+     * --> properties.id vs field.id
+     * --> properties.name vs field.name
+     * --> properties.pretty_name vs field.pretty_name
+    */
 
-    field = {
-      id : props.field_id,
-      description: propName === "description" ? propValue : field.description,
-      pretty_name: propName === "pretty_name" ? propValue : field.pretty_name,
-      field_type: propName === "field_type" ? propValue : field.field_type,
-      control_type: propName === "control_type" ? propValue : field.control_type,
-      options: propName === "options" ? propValue : field.options,
-      field_required: propName === "field_required" ? propValue : field.field_required,
+  const returnPropertyIndex = (prop_name) =>{
+
+    let itemFound = false
+    let index = 0
+    while(!itemFound && index < properties.length){
+      if (properties[index].description === prop_name){
+        itemFound = true
+      }else{
+        index++
+      }
     }
+    return index = itemFound ? index : -1;
+  }
 
-    console.log(JSON.stringify(field))
-    setField(field)
-    
+  const handleChange = (e) =>{
+    let tempField = {...field}
+    tempField[e.target.name] = e.target.value
+    setField(tempField)
   }
 
   const handleSubmit = () => {
@@ -77,7 +108,7 @@ const Properties = (props) => {
       <Modal.Body>
         
         <Form id="form_control" className="modal-form">
-          {properties.map(prop =>{
+          { properties.map(prop =>{
             return(
               <Form.Group>
 
@@ -86,33 +117,33 @@ const Properties = (props) => {
                 }
 
                 { prop.control_type === "text" && prop.visible ?
-                    <Form.Control onChange={()=>handleChange(prop.name)}
-                          name = {prop.name}
-                          id = {prop.name}
-                          required = {prop.field_required} 
-                          type = "text" 
-                          value = {prop.value}>
+                    <Form.Control onChange={(e)=>handleChange(e)}
+                          name={prop.description}
+                          id={prop.description}
+                          required={prop.field_required} 
+                          type="text" 
+                          value={prop.value}>
                     </Form.Control> : ''}
                   
                   { prop.control_type === "option" && prop.visible ?
-                    <Form.Control as="select" onChange={()=>handleChange(prop.name)}
-                      name = {prop.name}
-                      id = {prop.name}
-                      required = {prop.field_required} 
-                      type = "text" 
-                      value = {prop.value}>
+                    <Form.Control as="select" onChange={(e)=>handleChange(e)}
+                      name={prop.description}
+                      id={prop.description}
+                      required={prop.field_required} 
+                      type="text" 
+                      value={prop.value}>
                         {prop.options.map(opt => {
                             return(<option>{opt}</option>)
                         })}
                     </Form.Control> : ''}                
 
                   { prop.control_type === "checkbox" && prop.visible ?
-                    <Form.Check onChange={()=>handleChange(prop.name)}
-                      name = {prop.name}
-                      id = {prop.name}
-                      required = {prop.field_required} 
-                      checked = {prop.value} 
-                      label = {prop.pretty_name} />
+                    <Form.Check onChange={(e)=>handleChange(e)}
+                      name={prop.description}
+                      id={prop.description}
+                      required={prop.field_required} 
+                      checked={prop.value} 
+                      label={prop.pretty_name} />
                     : ''}
 
               </Form.Group>
