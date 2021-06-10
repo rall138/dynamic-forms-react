@@ -12,10 +12,25 @@ form > div {
     margin: 10px;
 }
 
+.form-check-label{
+    font-family: monospace !important;
+    color: white !important;
+    font-size: 14px;    
+}
+
 form > div > label {
-    font-family: monospace;
-    color: white;
-    display: inline-block;
+    width: 100%;
+    font-family: monospace !important;
+    font-size: 14px;
+    color: white !important;
+    background-color: #f2856a;
+    padding: 5px;
+}
+
+form > .form-group {
+    background-color: #f2856a;
+    border-radius: 5px;
+    padding: 5px;
 }
 
 form > div > input {

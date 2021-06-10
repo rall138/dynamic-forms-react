@@ -67,10 +67,11 @@ const SectionBody = (props) => {
   const [message, setMessage] = useState('')
   const [modalShow, setModalShow] = useState(false)
   const match = useRouteMatch()
+  const [parentId, setParentId] = useState(props.parent_id)
 
   useEffect(()=>{
     axios({
-      url:Constantes.SERVER_URL+`forms/${match.params.form_id}/sections/${match.params.id}/fields`,
+      url:Constantes.SERVER_URL+'forms/'+parentId.form_id+'/sections/'+parentId.section_id+'/fields',
       method: 'get',
       data: ''
     })
@@ -78,8 +79,7 @@ const SectionBody = (props) => {
       redefineRows(res.data)
     })
     .catch(error => {console.log(error)})
-
-  }, [])
+  }, [props])
 
   const redefineRows = (fields) => {
     
@@ -109,8 +109,8 @@ const SectionBody = (props) => {
     section_array.push({id: -1, description:''})
     rows.push({id: row_count, fields: section_array})
 
-    setRows(rows)
-    setEditableFields(fields)
+    setRows([...rows])
+    setEditableFields({...fields})
     
   }
 
