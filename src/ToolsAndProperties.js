@@ -11,17 +11,30 @@ const ToolsAndProperties = () =>  {
   const [field, setField] = useState()
   const [showModal, setShowModal] = useState(false)
   const [message, setMessage] = useState('')
-  const [mode, setMode] = useState('')
+  const [mode, setMode] = useState()
   const [parentId, setParentId] = useState({form_id: match.params.form_id, section_id: match.params.id})
 
-  const handleClickOnField = (field) => {
+  const handleNewItem = (field) => {
     setField(field)
+    setMode(Constantes.TRANSACTION_MODE.NEW)
+    console.log('new')
+    console.log(field.id)
+    console.log(field.description)
+  }
+
+  const handleUpdateItem = (field) => {
+    setField(field)
+    setMode(Constantes.TRANSACTION_MODE.UPDATE)
+    console.log('update')
+    console.log(field.id)
+    console.log(field.description)
   }
 
   useEffect(() =>{
-    if (field !== undefined){
-      setMode(Constantes.TRANSACTION_MODE.UPDATE)
+    if (field != undefined){
       setShowModal(true)
+    }else{
+      setShowModal(false)
     }
   }, [field])
 
@@ -40,8 +53,8 @@ const ToolsAndProperties = () =>  {
     }
   }, [message])
 
-  const handleOnHide = (message, show) =>{
-    setShowModal(show)
+  const handleOnHide = (message) =>{
+    setField(undefined)
     setMessage(message)
   }
 
@@ -55,7 +68,8 @@ const ToolsAndProperties = () =>  {
           <Alert key={'msg_1'} variant={message.variant}>{message.message}</Alert>:''}
 
           <EditableBody 
-            callbackClick={(field)=>handleClickOnField(field)} 
+            callbackUpdateItem={(field)=>handleUpdateItem(field)}
+            callbackNewItem={(field) =>handleNewItem(field)}
             parent_id={parentId} />
 
         </Col>
@@ -69,7 +83,7 @@ const ToolsAndProperties = () =>  {
         field={field}
         show={showModal}
         onShow={() => setShowModal(true)}
-        onHide={(message) => handleOnHide(message, false)} />
+        onHide={(message) => handleOnHide(message)} />
     </Container>
   )
 }

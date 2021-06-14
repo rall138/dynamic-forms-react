@@ -5,6 +5,7 @@ import {Container, Row, Col} from 'react-bootstrap'
 import EditableFields from './EditableField'
 import axios from 'axios'
 import Constantes from '../files/constantes.json'
+import ScheletonProps from '../files/field_properties.json'
 import Properties from "./Properties"
 
 const styles = {
@@ -60,7 +61,7 @@ const styles = {
 
 const SectionBody = (props) => {
 
-  const [fields, setEditableFields] = useState([])
+  const [fields, setFields] = useState([])
   const [rows, setRows] = useState([])
   const [deletedEditableFields, setDeletedEditableFields] = useState([])
   const [columns, setColumns] = useState(2)
@@ -86,7 +87,7 @@ const SectionBody = (props) => {
     fields = fields.filter(field =>(field.action !== 'delete'))
 
     let index = 0, row_count = 0, field_count = 0;
-    let section_array = [] 
+    let section_array = []
     let rows = []
 
     while(index < fields.length){
@@ -110,7 +111,7 @@ const SectionBody = (props) => {
     rows.push({id: row_count, fields: section_array})
 
     setRows([...rows])
-    setEditableFields({...fields})
+    setFields([...fields])
     
   }
 
@@ -126,10 +127,21 @@ const SectionBody = (props) => {
   }
 
   const addField = () => {
-    fields.push({id: fields.length > 0 ? fields[fields.length -1].id + 1
-    : 1, description:"New control", field_type:"text", action:'post', section_id: match.params.id})
+    let tempFields = [...fields]
+    
+    // copiamos el esqueleto de las propiedades
+    console.log(ScheletonProps)
+    let newField = {}
+    ScheletonProps.map(scheletonProp => {
+      newField[scheletonProp.description] = scheletonProp.value
+    })
+    
+    newField.id =  fields.length > 0 ? fields[fields.length -1].id + 1 : 1
+    
+    tempFields.push(newField)
+    redefineRows(tempFields)
 
-    redefineRows(fields)
+    props.callbackNewItem(newField)
   }
 
   const save = () => {
@@ -143,7 +155,7 @@ const SectionBody = (props) => {
     let fieldsAddedOrChanged = action === 'delete' ? deletedEditableFields : 
       fields.filter(field => (field.action === action))
     
-      let url = Constantes.SERVER_URL+`forms/${match.params.form_id}/sections/${match.params.id}/fields/`
+    let url = Constantes.SERVER_URL+`forms/${match.params.form_id}/sections/${match.params.id}/fields/`
 
     fieldsAddedOrChanged.forEach(field =>{
       axios({
@@ -182,7 +194,7 @@ const SectionBody = (props) => {
                       key={field.id}
                       field={field} 
                       handleAdd={() => addField()}
-                      handleClick={() => props.callbackClick(field)} 
+                      handleClick={() => props.callbackUpdateItem(field)} 
                       handleDeleteField={(field_id) => deleteField(field_id)}/>
                     </Col>
                   )

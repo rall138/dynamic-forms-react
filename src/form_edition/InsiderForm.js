@@ -28,6 +28,8 @@ const InsiderForm = (props) =>{
     const handleSubmit = () => {
 
         const form_control = document.getElementById('form_control');
+
+        console.log(props.mode)
     
         let url = Constantes.SERVER_URL+'forms/'+props.parent_id.form_id+'/sections/'+
         props.parent_id.section_id+'/fields/'
@@ -50,8 +52,7 @@ const InsiderForm = (props) =>{
               break;
         }
 
-        console.log(url)
-    
+        console.log(method)
         let message = ''
         if (form_control.checkValidity()){
           axios({
@@ -61,7 +62,6 @@ const InsiderForm = (props) =>{
           })
           .then(res =>{
             if(res.data.response === 'Ok'){
-                console.log(res.data.response)
                 message = {message: res.data.message, variant: 'success'}
                 props.onHide(message)
             }

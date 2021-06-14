@@ -34,7 +34,7 @@
         "pretty_name": "Type",
         "field_type": "text",
         "control_type": "option",
-        "options": ["text", "long_text", "numeric", "date", "blob"],
+        "options": ["", "text", "long_text", "numeric", "date", "blob"],
         "field_required": true,
         "visible": true,
         "value": null
@@ -44,7 +44,7 @@
         "pretty_name": "Control Type",
         "field_type": "text",
         "control_type": "option",
-        "options": ["input field", "numeric range", "calendar", "blob"],
+        "options": ["", "input field", "numeric range", "calendar", "blob"],
         "field_required": false,
         "visible": true,
         "value": null

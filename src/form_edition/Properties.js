@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { Modal, Button, Form } from 'react-bootstrap'
-import fieldJsonProperties from '../files/field_properties.json'
+import ScheletonProps from '../files/field_properties.json'
 import Constantes from '../files/constantes.json'
 import axios from "axios"
 import InsiderForm from "./InsiderForm"
 
 const Properties = (props) => {
   
-  const [attributes, setAttributes] = useState(fieldJsonProperties)
+  const [attributes, setAttributes] = useState(ScheletonProps)
   const [field, setField] = useState()
 
   /* 
@@ -35,12 +35,14 @@ const Properties = (props) => {
   })
 
   useEffect(() => {
+
+    console.log(JSON.stringify(field))
     let index = -1
     for(let property_name in field){
       index = returnPropertyIndex(property_name)
-      if (index > -1){
-        attributes[index].value = field[property_name]
-      }
+      console.log('searched prop: '+property_name+' '+field[property_name])
+      if (index > -1)
+        attributes[index].value = field[property_name] // field[description]
     }
     setAttributes([...attributes])
   }, [field])
@@ -53,7 +55,6 @@ const Properties = (props) => {
     */
 
   const returnPropertyIndex = (prop_name) =>{
-
     let itemFound = false
     let index = 0
     while(!itemFound && index < attributes.length){
