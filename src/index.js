@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import allReducers from './reducers'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { Button } from 'react-bootstrap';
 
 const store = createStore(
   allReducers, 
@@ -17,6 +18,14 @@ const store = createStore(
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}> 
+    
+      <div className="app-header relative-position"> 
+      <h3>Welcome to dynamic forms</h3>
+        <div className="float-right-top-10">
+          <Button variant="danger">Log out</Button>
+        </div>
+      </div>
+
       <App />
     </Provider>
   </React.StrictMode>,

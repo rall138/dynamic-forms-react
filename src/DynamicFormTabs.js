@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useRouteMatch, Link } from 'react-router-dom'
 import DynamicForm from "./DynamicForm";
+import { transactionMode } from "./files/constantes";
 import Sections from "./sections/Sections"
 
 const styles = {
@@ -39,7 +40,8 @@ const DynamicFormTabs = (props) => {
 
       <div className='tabGroup'>
           <button className='tab' title="Form" onClick={()=>setTabKey("Form")}>Form</button>
-          <button className='tab' title="Sections" onClick={()=>setTabKey("Sections")}>Sections</button>
+          {props.mode !== transactionMode.NEW ? 
+          <button className='tab' title="Sections" onClick={()=>setTabKey("Sections")}>Sections</button> : ''}
       </div>
 
       
@@ -49,7 +51,7 @@ const DynamicFormTabs = (props) => {
             <Link to={'/forms/'}>Go back to forms</Link>
         </div>
 
-        {tabKey === "Form" ? <DynamicForm mode={'update'} form_id={match.params.id} /> : 
+        {tabKey === "Form" ? <DynamicForm mode={props.mode} form_id={match.params.id} /> : 
         <Sections form_id={match.params.id} />}
       </div>
 

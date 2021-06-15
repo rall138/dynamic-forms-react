@@ -1,6 +1,36 @@
+/* =================== DOM Elements =================== */
+
 body{
     background-color: #264653;
     padding: 10px;
+}
+
+td{
+    height: 80px;
+    vertical-align: middle;
+    padding: 20px !important;
+}
+
+button.btn-danger, a.btn-danger {
+    background-color:#ee6c4d !important;
+    border: none;
+    font-family: monospace;
+}
+
+button.btn-success, a.btn-success{
+    background-color:#227348 !important;
+    border: none;
+    font-family: monospace;
+}
+
+
+/* =================== Element positions =================== */
+
+.relative-position{
+    position: relative;
+}
+.absolute-position{
+    position: absolute;
 }
 
 .float-right{
@@ -15,8 +45,27 @@ body{
     top: -30px;
 }
 
+.float-right-top-10{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
 .float-right-top > a {
     color: white;
+}
+
+.margin-right-bottom-5{
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+/* =================== Custom classes =================== */
+
+.app-header{
+    background-color: #323539;
+    height: 80px;
+    margin-bottom: 30px;
 }
 
 .modal-header{
@@ -25,24 +74,12 @@ body{
     font-family: monospace;
 }
 
-a.btn-danger {
-    background-color:#ee6c4d !important;
-}
-
-button.btn-danger {
-    background-color:#ee6c4d !important;
-}
-
 .button-success-block{
     background-color:#227348;
     color: white;
     font-size: 15px;
     border: none;
     width: 100%;
-}
-
-.absolute-position{
-    position: absolute;
 }
 
 .rounded-button {

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react"
 import PropTypes from "prop-types"
 import { Col, Container, Row } from "react-bootstrap"
 import axios from 'axios'
-import Constantes from '../files/constantes.json'
+import {server_url} from '../files/constantes'
 import GridSection from "./GridSection"
 
 const styles = {
@@ -68,7 +68,7 @@ const Sections = (props) => {
   useEffect(()=>{
 
     axios({
-      url: Constantes.SERVER_URL+'/forms/'+props.form_id+'/sections',
+      url: server_url+'/forms/'+props.form_id+'/sections',
       method: 'get',
       data: ''
     })
@@ -119,7 +119,7 @@ const Sections = (props) => {
     let section = {name: section_name, order: 0, form_id: props.form_id, columns: 1}
 
     axios({
-      url: Constantes.SERVER_URL+'forms/'+props.form_id+'/sections/',
+      url: server_url+'forms/'+props.form_id+'/sections/',
       method: 'post',
       data: section
     })
@@ -142,7 +142,7 @@ const Sections = (props) => {
     let confirmation = window.confirm("You're just about removing this section\n are you sure? ")
     if (confirmation){
       axios({
-        url: Constantes.SERVER_URL+'forms/'+props.form_id+'/sections/'+section_id,
+        url: server_url+'forms/'+props.form_id+'/sections/'+section_id,
         method: 'delete',
         data: ''
       })
@@ -166,7 +166,7 @@ const Sections = (props) => {
           <Row style={{padding:10}} key={row.id}>
             {row.sections.map(section =>{
               return(
-                  <Col key={section.id}>
+                  <Col key={section.id} md="auto">
                     <GridSection
                       form_id={props.form_id}
                       key={section.id}

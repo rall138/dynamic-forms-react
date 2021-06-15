@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Modal, Button, Form } from 'react-bootstrap'
 import ScheletonProps from '../files/field_properties.json'
-import Constantes from '../files/constantes.json'
+import Constantes from '../files/constantes'
 import axios from "axios"
 import InsiderForm from "./InsiderForm"
 
@@ -35,12 +35,9 @@ const Properties = (props) => {
   })
 
   useEffect(() => {
-
-    console.log(JSON.stringify(field))
     let index = -1
     for(let property_name in field){
       index = returnPropertyIndex(property_name)
-      console.log('searched prop: '+property_name+' '+field[property_name])
       if (index > -1)
         attributes[index].value = field[property_name] // field[description]
     }

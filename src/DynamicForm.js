@@ -1,173 +1,129 @@
 import React, { useState, useEffect } from "react"
 import {Button, Alert, Form} from "react-bootstrap"
 import { useRouteMatch } from 'react-router-dom'
-import PropTypes from "prop-types"
 import axios from "axios"
-import Constantes from './files/constantes.json'
+import {server_url, transactionMode} from './files/constantes'
 import './css/form.css'
 
-const transaction_mode = {new: "new", update: "update", delete: "delete", display: "display"}
+const DynamicForm = (props) => {
 
-const DynamicForm = () => {
-
-  const [message, setMessage] = useState('')
-  const [variant, setVariant] = useState('')
-  const [form, setForm] = useState({id: 0, title:"", subtitle:"", description:""})
+  const [message, setMessage] = useState()
+  const [form, setForm] = useState({title:"", subtitle:"", description:""})
   
   // Nos permite obtener los parámetros de la url
   const match = useRouteMatch();
-  const mode = match.params.mode
 
   useEffect(() => {
-
-    let retrive_data = false
-
-    switch(mode){
-      case transaction_mode.update:
-        retrive_data = true
-        break
-      case transaction_mode.display:
-        retrive_data = true
-        break
-        case transaction_mode.delete:
-          retrive_data = true
-          break
-        default:
-          retrive_data = true
-      }
-
-      if(retrive_data){
-        axios({
-          url: Constantes.SERVER_URL+`forms/${match.params.id}`,
-          method: 'get',
-          data: ''
-        })
-        .then(res =>{
-          setForm(res.data)
-        }).catch(err =>{
-          console.log(err)
-        })
-      }
-
+    if(props.mode !== transactionMode.NEW){
+      axios({
+        url: server_url+`forms/${match.params.id}`,
+        method: 'get',
+        data: ''
+      })
+      .then(res =>{
+        setForm(res.data)
+      }).catch(err =>{
+        console.log(err)
+      })
+    }
   }, []);
 
   const handleChange = event =>{
-    
-    // En el caso del insert tenemos que eliminar el id, sino generamos conflicto al insertar objeto con id 0
-    if (mode === transaction_mode.new){
-      setForm({
-        title: event.target.name === "form_title" ? event.target.value : form.title,
-        subtitle: event.target.name === "form_subtitle" ? event.target.value : form.subtitle,
-        description: event.target.name === "form_description" ? event.target.value : form.description,
-      })
-    }else{
-      setForm({
-        id: form.id,
-        title: event.target.name === "form_title" ? event.target.value : form.title,
-        subtitle: event.target.name === "form_subtitle" ? event.target.value : form.subtitle,
-        description: event.target.name === "form_description" ? event.target.value : form.description,
-      })
-    }
-    
+    const tempForm = {...form}
+    tempForm[event.target.name] = event.target.value
+    setForm(tempForm)
   }
 
-  const handleSubmit = event => {
-
-    event.preventDefault();
+  const handleSubmit = (event) => {
 
     const form_control = event.currentTarget;
+
     if (form_control.checkValidity() === false){
-      event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
     }else{
 
-      let formId = match.params.id
-      let preformedURL = Constantes.SERVER_URL+'forms/'
-      let axiosBody = {url: '', method: '', data: null}
-      let isError = false
-      
-      switch(mode){
-        case transaction_mode.new:
-          axiosBody.url = preformedURL
-          axiosBody.method = 'post'
-          axiosBody.data = form
-          break;
-        case transaction_mode.update:
-          axiosBody.url = preformedURL+formId
-          axiosBody.method = 'put'
-          axiosBody.data = form
-          break;
-        case transaction_mode.delete:
-          axiosBody.url = preformedURL+formId+'/destroy'
-          axiosBody.method = 'delete'
-          break;
-        default:
-            throw Error('Undefined mode for transaction');
-        }
+      let method = undefined
+      let data = {form}
+      let url = server_url+'forms/'
 
-      if (axiosBody.url !== ''){
-        axios(axiosBody)
-        .then(res =>{
-          isError = (res.data.response === "Ok" )
-          setResponseToState(isError)
-        })
-        .catch(err =>{
-          setResponseToState(true)
-        })
+      if(props.mode === transactionMode.NEW){
+        method = 'post'
+      }else{
+        url += match.params.id
+        method = 'put'
       }
-
+        
+      axios({
+        url: url,
+        method: method,
+        data: data
+      })
+      .then(res =>{
+        if (res.data.response === 'Ok'){
+          setMessage({message:res.data.message, variant:'success'})
+        }else{
+          setMessage({message:res.data.message, variant:'danger'})
+        }
+      })
+      .catch(error =>{
+        setMessage({message:error.message, variant:'danger'})
+      })
     }
 
   }
 
-  const setResponseToState = isError => {
-    if (isError){
-      setMessage("Error occurred!")
-      setVariant("danger")
-    }else{
-      setMessage("Succesfully completed!")
-      setVariant("success")
-    }
+  const sleep = (ms) =>{
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
+
+  useEffect(()=>{
+    if(message !== undefined){
+      sleep(2500).then(res => {
+        setMessage()
+      })
+    }
+  }, [message])
 
   return (
     <div style={{paddingTop:'5px'}}>
 
-      {variant !== '' ? 
-        <Alert transition={false} variant={variant}>{message}</Alert> : null }
+      {message !== undefined ? 
+        <Alert transition={false} variant={message.variant}>{message.message}</Alert> : '' }
 
-      <Form onSubmit={()=>handleSubmit}>
+      <Form id="form-control" onSubmit={handleSubmit}>
 
         <Form.Group>
           <Form.Label>Title</Form.Label>
-          <Form.Control onChange={()=>handleChange}
-            name = "form_title"
+          <Form.Control onChange={handleChange}
+            name = "title"
             id = "form_title"
             required 
             type = "text" 
             placeholder = "Insert a title"
-            value = {form.title}>
+            defaultValue = {form.title}>
           </Form.Control>
         </Form.Group>
 
         <Form.Group>
           <Form.Label>Subtitle</Form.Label>
-          <Form.Control onChange={()=>handleChange}
-            name = "form_subtitle"
+          <Form.Control onChange={handleChange}
+            name = "subtitle"
             id = "form_subtitle"
             type = "text"
             placeholder="Insert a subtitle (optional)"
-            value = {form.subtitle}>
+            defaultValue = {form.subtitle}>
           </Form.Control>
         </Form.Group>
 
         <Form.Group>
           <Form.Label>Description</Form.Label>
-          <Form.Control onChange={()=>handleChange}
-            name = "form_description"
+          <Form.Control onChange={handleChange}
+            name = "description"
             id = "form_description"
             type="textarea" 
             placeholder=""
-            value = {form.description}>
+            defaultValue = {form.description}>
           </Form.Control>
         </Form.Group>
 
@@ -180,9 +136,5 @@ const DynamicForm = () => {
   );
 
 }
-
-DynamicForm.propTypes = {
-  mode: PropTypes.string
-};
 
 export default DynamicForm

@@ -2,7 +2,7 @@ import {React, useState, useEffect} from "react"
 import axios from 'axios'
 import {Alert, Button, Table } from "react-bootstrap"
 import './css/tablegrid.css'
-import Constantes from './files/constantes.json'
+import {server_url} from './files/constantes'
 
 const styles = {
   buttonContainer:{
@@ -16,14 +16,12 @@ const styles = {
 const DynamicForms = () => {
 
   const [forms, setForms] = useState([])
-  const [message, setMessage] = useState('')
-  const [variant, setVariant] = useState('')
+  const [message, setMessage] = useState(undefined)
 
   useEffect(() => {
  
-    console.log(Constantes.SERVER_URL+'forms/')
     axios({
-      url: Constantes.SERVER_URL+'forms/',
+      url: server_url+'forms/',
       method: 'get',
       data:''
     })
@@ -37,33 +35,47 @@ const DynamicForms = () => {
 
   }, [])
 
+  const sleep = (ms) =>{
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
+  useEffect(()=>{
+    if(message !== undefined){
+      sleep(2500).then(res => {
+        setMessage()
+      })
+    }
+  }, [message])
+
+
   const deleteItem = (id) => {
 
-    if (window.onfirm("You're just about deleting this form, are you sure?")){
+    if (window.confirm("You're just about deleting this form, are you sure?")){
 
       axios({
-        url: Constantes.SERVER_URL+'forms/'+id,
+        url: server_url+'forms/'+id,
         method: 'delete',
         data: ''
       })
       .then(res =>{
-        if (res.status === 204 || res.status === 200){
-          setMessage("Succesfully completed!")
-          setVariant("success")
+        if (res.data.response === 'Ok'){
+          setMessage({message: res.data.message, variant:'success'})
           setForms(forms.filter((form) => form.id !== id))
         }else{
-          setMessage("Error occurred!")
-          setVariant("danger")
+          setMessage({message: res.data.message, variant:'danger'})
         }
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log(error)
+        setMessage({message: error.message, variant:'danger'})
+      })
     }
   }
 
   return (
     <div className="container">
-      {variant !== '' ? 
-          <Alert transition={false} variant={variant}>{message}</Alert> : null }
+      {message !== undefined ? 
+          <Alert transition={false} variant={message.variant}>{message.message}</Alert> : null }
 
       <div className="absolute-position">
 

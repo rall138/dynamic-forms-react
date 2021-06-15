@@ -28,7 +28,7 @@ const GridSection = (props) => {
                 {section.id >= 0 ?
                     <Link className='centered-link' to={`/forms/${props.form_id}/sections/${section.id}/edit`}>Update</Link> 
                     : 
-                    <Button onClick={()=>props.handleRemove()} variant="outline-success">Add</Button>
+                    <Button onClick={()=>props.handleAdd()} variant="outline-success">Add</Button>
                 }
             </div>
 

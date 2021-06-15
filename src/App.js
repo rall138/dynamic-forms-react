@@ -4,6 +4,7 @@ import ToolsAndProperties from './ToolsAndProperties'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/app.css'
+import { transactionMode } from './files/constantes';
 
 function App() {
 
@@ -14,10 +15,10 @@ function App() {
           <DynamicForms />
         </Route>
         <Route path='/forms/:id/edit'>
-          <DynamicFormTabs />
+          <DynamicFormTabs mode={transactionMode.UPDATE} />
         </Route>
         <Route path='/forms/new'>
-          <DynamicFormTabs />
+          <DynamicFormTabs mode={transactionMode.NEW} />
         </Route>
         <Route path='/forms/:form_id/sections/:id/edit'>
           <ToolsAndProperties />

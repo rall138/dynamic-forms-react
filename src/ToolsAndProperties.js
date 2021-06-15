@@ -2,13 +2,16 @@ import React, {useEffect, useState} from "react"
 import EditableBody from './form_edition/EditableBody'
 import {Container, Row, Col, Alert} from 'react-bootstrap'
 import Properties from "./form_edition/Properties"
+import ConfirmAction from "./form_edition/ConfirmAction"
 import { useRouteMatch } from 'react-router-dom'
-import Constantes from './files/constantes.json'
+import {server_url, transactionMode} from './files/constantes'
+import axios from "axios"
 
 const ToolsAndProperties = () =>  {
 
   const match = useRouteMatch()
   const [field, setField] = useState()
+  const [showModalDelete, setShowModalDelete] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [message, setMessage] = useState('')
   const [mode, setMode] = useState()
@@ -16,27 +19,36 @@ const ToolsAndProperties = () =>  {
 
   const handleNewItem = (field) => {
     setField(field)
-    setMode(Constantes.TRANSACTION_MODE.NEW)
-    console.log('new')
-    console.log(field.id)
-    console.log(field.description)
+    setMode(transactionMode.NEW)
   }
 
   const handleUpdateItem = (field) => {
     setField(field)
-    setMode(Constantes.TRANSACTION_MODE.UPDATE)
-    console.log('update')
-    console.log(field.id)
-    console.log(field.description)
+    setMode(transactionMode.UPDATE)
+  }
+
+  const handleDeleteItem = (field) => {
+    setField(field)
+    setMode(transactionMode.DELETE)
   }
 
   useEffect(() =>{
-    if (field != undefined){
-      setShowModal(true)
+    if (field !== undefined){
+      switch(mode){
+        case transactionMode.NEW:
+        case transactionMode.UPDATE:
+          setShowModal(true)
+          break;
+        case transactionMode.DELETE:
+          setShowModalDelete(true)
+          break;
+      }
+
     }else{
       setShowModal(false)
+      setShowModalDelete(false)
     }
-  }, [field])
+  }, [mode])
 
 
   const sleep = (ms) =>{
@@ -54,8 +66,28 @@ const ToolsAndProperties = () =>  {
   }, [message])
 
   const handleOnHide = (message) =>{
+
+    if(mode === transactionMode.DELETE && message.message === 'confirmed'){
+      axios({
+        url: server_url+'forms/'+parentId.form_id+'/sections/'+parentId.section_id+'/fields/'+field.id,
+        method:'delete',
+        data:''
+      })
+      .then(res=>{
+        if(res.data.response === 'Ok'){
+          setMessage({message:res.data.message, variant:'success'})
+        }else{
+          setMessage({message:res.data.message, variant:'danger'})
+        }
+      })
+      .catch(err => {console.log(err)
+        setMessage({message:err.message, variant:'danger'})
+      })
+    }else{
+      setMessage(message)
+    }
     setField(undefined)
-    setMessage(message)
+    setMode(undefined)
   }
 
   return (
@@ -70,6 +102,7 @@ const ToolsAndProperties = () =>  {
           <EditableBody 
             callbackUpdateItem={(field)=>handleUpdateItem(field)}
             callbackNewItem={(field) =>handleNewItem(field)}
+            callbackDeleteItem={(field) =>handleDeleteItem(field)}
             parent_id={parentId} />
 
         </Col>
@@ -84,6 +117,14 @@ const ToolsAndProperties = () =>  {
         show={showModal}
         onShow={() => setShowModal(true)}
         onHide={(message) => handleOnHide(message)} />
+
+      <ConfirmAction
+          parent_id={parentId}
+          field={field}
+          show={showModalDelete}
+          confirmationMessage={'You are just about deleting this item, are you sure?'}
+          onHideConfirm={(message) => handleOnHide(message)} />
+      
     </Container>
   )
 }

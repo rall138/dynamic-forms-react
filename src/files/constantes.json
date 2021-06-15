@@ -1,4 +1,0 @@
-{
-    "SERVER_URL": "http://localhost:3000/",
-    "TRANSACTION_MODE": {"NEW": "new", "UPDATE": "update", "DELETE": "delete", "DISPLAY": "display"}
-}

@@ -57,6 +57,6 @@
         "options": [],
         "field_required": false,
         "visible": true,
-        "value": null
+        "value": true
     }
 ]

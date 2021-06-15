@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
-import Constantes from '../files/constantes.json'
+import {transactionMode, server_url} from '../files/constantes'
 import axios from 'axios'
 
 const InsiderForm = (props) =>{
@@ -21,6 +21,7 @@ const InsiderForm = (props) =>{
 
     const handleChange = (e) =>{
         let tempField = {...field}
+        tempField['section_id'] = props.parent_id.section_id
         tempField[e.target.name] = e.target.value
         setField(tempField)
     }
@@ -29,31 +30,23 @@ const InsiderForm = (props) =>{
 
         const form_control = document.getElementById('form_control');
 
-        console.log(props.mode)
-    
-        let url = Constantes.SERVER_URL+'forms/'+props.parent_id.form_id+'/sections/'+
+        let url = server_url+'forms/'+props.parent_id.form_id+'/sections/'+
         props.parent_id.section_id+'/fields/'
     
         let method = ''
         let data = { field }
     
         switch(props.mode){
-          case Constantes.TRANSACTION_MODE.NEW:
+          case transactionMode.NEW:
             method = 'post'
             break;
-          case Constantes.TRANSACTION_MODE.UPDATE:
+          case transactionMode.UPDATE:
               url += field.id
               method = 'put'
               break;
-          case Constantes.TRANSACTION_MODE.DELETE:
-              url += field.id
-              method = 'delete'
-              data = ''
-              break;
         }
 
-        console.log(method)
-        let message = ''
+        let newMessage = {...message}
         if (form_control.checkValidity()){
           axios({
             url: url,
@@ -62,13 +55,14 @@ const InsiderForm = (props) =>{
           })
           .then(res =>{
             if(res.data.response === 'Ok'){
-                message = {message: res.data.message, variant: 'success'}
-                props.onHide(message)
+                newMessage = {message: res.data.message, variant: 'success'}
+                props.onHide(newMessage)
             }
           })
           .catch(error => {console.log(error)
-            message = {message: error, variant: 'danger'}
-            props.onHide(message)
+            newMessage = {message: error.message, variant: 'danger'}
+            console.log(JSON.stringify(error))
+            props.onHide(newMessage)
           })
         }
     }    
@@ -79,7 +73,7 @@ const InsiderForm = (props) =>{
                 
                 return(
 
-                    <Form.Group style={{display: attr.visible ? 'default': 'none'}}>
+                    <Form.Group key={'grp_'+attr.id} style={{display: attr.visible ? 'default': 'none'}}>
 
                         { attr.control_type !== "checkbox" && attr.visible ? 
                             <Form.Label>{attr.pretty_name}</Form.Label>: ''}
@@ -101,7 +95,7 @@ const InsiderForm = (props) =>{
                             type="text" 
                             defaultValue={attr.value}>
                             {attr.options.map(opt => {
-                                return(<option>{opt}</option>)
+                                return(<option key={opt}>{opt}</option>)
                             })}
                         </Form.Control> : ''}                
 

@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 import {Container, Row, Col} from 'react-bootstrap'
 import EditableFields from './EditableField'
 import axios from 'axios'
-import Constantes from '../files/constantes.json'
+import {server_url} from '../files/constantes'
 import ScheletonProps from '../files/field_properties.json'
 import Properties from "./Properties"
 
@@ -72,7 +72,7 @@ const SectionBody = (props) => {
 
   useEffect(()=>{
     axios({
-      url:Constantes.SERVER_URL+'forms/'+parentId.form_id+'/sections/'+parentId.section_id+'/fields',
+      url:server_url+'forms/'+parentId.form_id+'/sections/'+parentId.section_id+'/fields',
       method: 'get',
       data: ''
     })
@@ -115,8 +115,9 @@ const SectionBody = (props) => {
     
   }
 
-  const deleteField = (field_id) => {
-    let field = fields.filter(field =>(field.id === field_id))[0]
+  // Manejamos una coleccion aparte para los elementos que se pretenden eliminar
+  const deleteField = (fieldToDelete) => {
+    let field = fields.filter(field =>(field.id === fieldToDelete.id))[0]
     field.action = 'delete'
 
     deletedEditableFields.push({...field})
@@ -124,6 +125,8 @@ const SectionBody = (props) => {
     
     fields[fields.indexOf(field)] = field
     redefineRows(fields)
+
+    props.callbackDeleteItem(fieldToDelete)
   }
 
   const addField = () => {
@@ -142,36 +145,6 @@ const SectionBody = (props) => {
     redefineRows(tempFields)
 
     props.callbackNewItem(newField)
-  }
-
-  const save = () => {
-    persisteChanges('delete')
-    persisteChanges('post')
-    persisteChanges('put')
-  }
-
-  const persisteChanges = (action) =>{
-
-    let fieldsAddedOrChanged = action === 'delete' ? deletedEditableFields : 
-      fields.filter(field => (field.action === action))
-    
-    let url = Constantes.SERVER_URL+`forms/${match.params.form_id}/sections/${match.params.id}/fields/`
-
-    fieldsAddedOrChanged.forEach(field =>{
-      axios({
-        url: action === 'post' ? url : url+field.id, //Agregamos el id de field para put y delete
-        method: action,
-        data: field,
-      })
-      .then(res => {
-        setMessage(res.message)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  
-    })
-
   }
 
   return (
@@ -195,7 +168,7 @@ const SectionBody = (props) => {
                       field={field} 
                       handleAdd={() => addField()}
                       handleClick={() => props.callbackUpdateItem(field)} 
-                      handleDeleteField={(field_id) => deleteField(field_id)}/>
+                      handleDeleteField={(field) => deleteField(field)}/>
                     </Col>
                   )
                 })}
