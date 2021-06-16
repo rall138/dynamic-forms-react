@@ -19,12 +19,16 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}> 
     
-      <div className="app-header relative-position"> 
-        <h4 className="absolute-position center-vertical">
-          Welcome to dynamic forms
-        </h4>
-        <div className="float-right-top-10">
-          <Button variant="danger">Log out</Button>
+      <div className="app-header">
+        <div className="horizontal-left-50percent">
+          <span className="horizontal-center header-title">
+            Welcome to dynamic forms - by rLomez
+          </span>
+        </div>
+        <div className="relative-position"> 
+          <div className="float-right-top-10">
+            <Button variant="danger">Log out</Button>
+          </div>
         </div>
       </div>
 

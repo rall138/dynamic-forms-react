@@ -1,5 +1,6 @@
 import DynamicForms from './DynamicForms'
 import DynamicFormTabs from './DynamicFormTabs'
+import Login from './Login'
 import ToolsAndProperties from './ToolsAndProperties'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,6 +12,9 @@ function App() {
   return (
     <Router>
       <Switch>
+        <Route exact path='/'>
+          <Login />
+        </Route>
         <Route exact path='/forms'>
           <DynamicForms />
         </Route>

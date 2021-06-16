@@ -17,7 +17,7 @@ button.btn-danger, a.btn-danger {
     font-family: monospace;
 }
 
-button.btn-success, a.btn-success{
+button.btn-success:not(.button-link), a.btn-success{
     background-color:#227348 !important;
     border: none;
     font-family: monospace;
@@ -60,10 +60,25 @@ button.btn-success, a.btn-success{
     margin-right: 5px;
 }
 
-.vertical-center{
-    top: 50%;
-    width: 50%;
+
+/* for the container of the element */
+.horizontal-left-50percent{
+    position: absolute;
+    left: 50%;
 }
+
+/* the element to center */
+.horizontal-center{
+    position: relative;
+    left: -50%;
+}
+
+.horizontal-center-right{
+    position: relative;
+    top: 0px;
+    left: 50%;
+}
+
 /* =================== Custom classes =================== */
 
 .app-header{
@@ -115,4 +130,67 @@ button.btn-success, a.btn-success{
 .button-group > button {
     display: inline-block;
     margin-left: 10px;
+}
+
+.header-title{
+    color: white;
+    font-size: x-large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    top: 20px;
+}
+
+.login-header-container{
+    height: 100%;
+    background-color: #25272B;
+    border-radius: 5px 0px 0px 5px;
+    padding: 10px;
+}
+
+.login-text-container{
+    height: 100%;
+    background-color: #36383a;
+    border-radius: 0px 0px 5px 0px;
+    padding: 10px;
+}
+
+.login-text-left-container{
+    height: 100%;
+    background-color: #25272B;
+    border-radius: 0px 5px 5px 0px;
+    padding: 10px;
+}
+
+.login-text{
+    color: white;
+    font-family: monospace;
+    text-align: center;
+    display: block;
+}
+
+.login-text-left{
+    color: white;
+    font-family: monospace;
+    text-align: left;
+    display: block;
+}
+
+.login-login-text{
+    background-color: #d62828;
+    border-radius: 5px 5px 0px 0px;
+    padding: 5px;
+    color: white;
+    font-family: monospace;
+}
+
+.button-link{
+    background: none !important;
+    background-color: #25272B !important;
+    color:red !important;
+    text-decoration: underline;
+}
+
+.rounded-image{
+    border-radius: 20% 5px 20% 5px;
+    opacity: 0.6;
+    
 }
