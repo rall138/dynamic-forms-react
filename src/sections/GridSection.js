@@ -34,7 +34,7 @@ const GridSection = (props) => {
 
             {section.id >= 0 ?
                 <div className="anchored-bottom">
-                    <button onClick={()=> props.handleRemove()}>
+                    <button onClick={()=> props.handleRemove(section)}>
                         [X] Remove section
                     </button>
                 </div> : ''

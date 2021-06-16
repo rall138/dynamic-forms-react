@@ -34,24 +34,23 @@ const InsiderForm = (props) =>{
         props.parent_id.section_id+'/fields/'
     
         let method = ''
-        let data = { field }
-    
         switch(props.mode){
           case transactionMode.NEW:
             method = 'post'
+            delete field.id // WA para evitar la duplicidad de clave, sino estamos forzando su valor.
             break;
           case transactionMode.UPDATE:
               url += field.id
               method = 'put'
               break;
         }
-
+        
         let newMessage = {...message}
         if (form_control.checkValidity()){
           axios({
             url: url,
             method: method,
-            data: data
+            data: { field }
           })
           .then(res =>{
             if(res.data.response === 'Ok'){

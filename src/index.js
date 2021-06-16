@@ -20,7 +20,9 @@ ReactDOM.render(
     <Provider store={store}> 
     
       <div className="app-header relative-position"> 
-      <h3>Welcome to dynamic forms</h3>
+        <h4 className="absolute-position center-vertical">
+          Welcome to dynamic forms
+        </h4>
         <div className="float-right-top-10">
           <Button variant="danger">Log out</Button>
         </div>

@@ -133,14 +133,12 @@ const SectionBody = (props) => {
     let tempFields = [...fields]
     
     // copiamos el esqueleto de las propiedades
-    console.log(ScheletonProps)
     let newField = {}
     ScheletonProps.map(scheletonProp => {
       newField[scheletonProp.description] = scheletonProp.value
     })
     
-    newField.id =  fields.length > 0 ? fields[fields.length -1].id + 1 : 1
-    
+    //newField.id =  fields.length > 0 ? fields[fields.length -1].id + 1 : 1
     tempFields.push(newField)
     redefineRows(tempFields)
 

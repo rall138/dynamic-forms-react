@@ -62,7 +62,7 @@ const styles = {
 const Sections = (props) => {
 
   const [rows, setRows] = useState([{id : "", sections: []}])
-  const [sections, setSections] = useState([])
+  const [sections, setSections] = useState()
   const [columns, setColumns] = useState(4)
 
   useEffect(()=>{
@@ -82,7 +82,7 @@ const Sections = (props) => {
   // Dividimos en 4 la cantidad de columnas que mostraremos osea las secciones por fila.
   const redefineRows = (sections) => {
     
-    sections = sections.filter(sec =>(sec.id >= 0))
+    sections = sections.filter(sec => sec.id >= 0)
 
     let index = 0, row_count = 0, section_count = 0;
     let section_array = [] 
@@ -125,7 +125,7 @@ const Sections = (props) => {
     })
     .then(res=>{
       if (res.data.response === 'Ok'){
-        sections.push({id: id, name: section_name})
+        sections.push({id: res.data.extra_data, name: section_name})
         redefineRows(sections)
       }
     })
@@ -133,27 +133,23 @@ const Sections = (props) => {
 
   };
 
-  /*
-  updateSection = (section_id) => {
-    window.location.replace(Constantes.SERVER_URL+'forms/'+props.form_id+'/sections/'+section_id+'/edit')
-  }*/
-
-  const removeSection = (section_id) => {
+  const removeSection = (section) => {
     let confirmation = window.confirm("You're just about removing this section\n are you sure? ")
     if (confirmation){
       axios({
-        url: server_url+'forms/'+props.form_id+'/sections/'+section_id,
+        url: server_url+'forms/'+props.form_id+'/sections/'+section.id,
         method: 'delete',
         data: ''
       })
       .then(res =>{
         if(res.data.response === "Ok"){
-          sections = sections.filter(section => (section.id !== section_id))
-          redefineRows(sections)
+          let tempSections = [...sections]
+          tempSections = tempSections.filter(sec => (sec.id !== section.id))
+          redefineRows(tempSections)
         }
       })
       .catch(err =>{
-        console.log(err)
+        console.log(err.message)
       })
     }
 
@@ -172,7 +168,7 @@ const Sections = (props) => {
                       key={section.id}
                       section={section}
                       handleAdd={() => addSection()}
-                      handleRemove={() => removeSection(section.id)} 
+                      handleRemove={(section) => removeSection(section)} 
                     />
                   </Col>
                   )

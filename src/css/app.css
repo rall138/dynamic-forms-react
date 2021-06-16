@@ -27,7 +27,7 @@ button.btn-success, a.btn-success{
 /* =================== Element positions =================== */
 
 .relative-position{
-    position: relative;
+    position: relative !important;
 }
 .absolute-position{
     position: absolute;
@@ -60,6 +60,10 @@ button.btn-success, a.btn-success{
     margin-right: 5px;
 }
 
+.vertical-center{
+    top: 50%;
+    width: 50%;
+}
 /* =================== Custom classes =================== */
 
 .app-header{

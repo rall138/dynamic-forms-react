@@ -44,11 +44,11 @@ const DynamicForm = (props) => {
     }else{
 
       let method = undefined
-      let data = {form}
       let url = server_url+'forms/'
 
       if(props.mode === transactionMode.NEW){
         method = 'post'
+        delete form.id
       }else{
         url += match.params.id
         method = 'put'
@@ -57,7 +57,7 @@ const DynamicForm = (props) => {
       axios({
         url: url,
         method: method,
-        data: data
+        data: {form}
       })
       .then(res =>{
         if (res.data.response === 'Ok'){
