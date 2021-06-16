@@ -1,17 +1,48 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import profile_img from './files/profile.jpg'
+import { useDispatch } from 'react-redux'
+
 
 const Login = () => {
 
+    const [userName, setUserName] = useState()
+    const [userPwd, setUserPwd] = useState()
+    const [message, setMessage] = useState({message: '', variant:''})
+
+    const dispatch = useDispatch()
 
     const handleChange = event =>{
-
+        if(event.target.id === 'userName')
+            setUserName(event.target.value)
+        else if (event.target.id === 'userPassword')
+            setUserPwd(event.target.value)
     }
 
     const handleSubmit = event => {
 
+        const formControl = event.currentTarget
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (formControl.checkValidity() === true){
+            if(userName === 'user' && userPwd === 'password'){
+                dispatch({type: 'session/login'})
+                
+                sleep(3500).then(res => {
+                    window.location.replace('/forms')
+                  })
+            }else{
+                setMessage({message: 'user or password incorrect', variant:'danger'})
+            }
+        }
+    
     }
+
+    const sleep = (ms) =>{
+        return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
     return(
         <Container>
             <Row>
@@ -19,31 +50,35 @@ const Login = () => {
                 <Col md={6}>
                     <Container className="">
                         <Row style={{marginBottom:10}}>
-                            <Col>
+                            <Col md={2} className="no-padding">
                                 <div className="login-header-container">
                                     <img className="rounded-image" src={profile_img} alt="My profile picture" width="80" height="90" />
                                 </div>
                             </Col>
-                            <Col>
+                            <Col className="no-padding">
                                 <div className="login-text-left-container">
                                     <span className="login-text-left">
-                                        Name: Ricardo Lómez<br/>
-                                        Birth date: 13/08/88<br/>
-                                        Age: 32<br/><br/>
-                                        [ Passionate developer ]
+                                        &nbsp;&nbsp;&nbsp;&nbsp;Name: Ricardo Lómez<br/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;Birth date: 13/08/88<br/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;Age: 32<br/><br/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;[ Passionate developer ]
                                     </span>
                                 </div>
                             </Col>
                         </Row>
                         <Row>
-                            <Col>
+                            <Col className="no-padding">
                             <div className="login-login-text">
                                 Login
                             </div>
                             </Col>
                         </Row>
                         <Row>
-                            <Col>
+                            <Col className="no-padding">
                                 <Form className="form-login" 
                                     key="form_control" 
                                     id="form_login" 
@@ -74,7 +109,7 @@ const Login = () => {
                                 </Form>
                             </Col>
                             
-                            <Col>
+                            <Col className="no-padding">
                                 <div className="login-text-container">
                                     
                                     <span className="login-text">

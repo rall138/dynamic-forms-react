@@ -28,12 +28,12 @@
   padding: 5px;
   font-family: monospace;
   font-size: 13px;
-  background-color: #f94144;
+  background-color: #d62828;
   color: white;
 }
 
 .anchored-bottom > button{
-  background-color: #f94144;
+  background-color: #d62828;
   color: white;
   border: none;
 }
