@@ -3,7 +3,7 @@ form:not(#form_login) {
     font-family: monospace !important;   
     position: relative;
     border-radius: 5px 5px 5px 5px;
-    background-color: #d62828;
+    background-color: #DB3030;
     padding: 10px;
     margin: 20px;
 }
@@ -23,12 +23,12 @@ form:not(#form_login) > div > label {
     font-family: monospace !important;
     font-size: 14px;
     color: white !important;
-    background-color: #d62828;
+    background-color: #DB3030;
     padding: 5px;
 }
 
 form:not(#form_login) > .form-group {
-    background-color: #d62828;
+    background-color: #DB3030;
     border-radius: 5px;
     padding: 5px;
 }

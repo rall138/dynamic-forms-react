@@ -1,19 +1,12 @@
 function loginReducer(state = { value: false }, action) {
-    let loginState = localStorage.getItem('login-state')
     switch (action.type) {
       case 'session/login':
-        loginState = { value: true }
-        break;
+        return { value: true }
       case 'session/logout':
-        loginState = { value: false }
-        break;
+        return { value: false }
       default:
-        return loginState
+        return state
     }
-    
-    console.log(JSON.stringify(loginState))
-    localStorage.setItem("login-state", {value: loginState.value})
-    return loginState
   }
   
 export default loginReducer

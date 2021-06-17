@@ -9,15 +9,16 @@ import { createStore } from 'redux'
 import allReducers from './reducers'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { Button } from 'react-bootstrap';
+import { loadState, saveState } from './helpers/localStorageHelper';
+import { sleep } from './helpers/sleepHelper';
 
 const store = createStore(
-  allReducers, 
+  allReducers, loadState(), 
   composeWithDevTools()
 );
 
-
 const handlelogOut = () => {
-  store.dispatch({type: 'session/logut'})
+  store.dispatch({type: 'session/logout'})
   window.location.replace('/')
 }
 
@@ -50,7 +51,10 @@ ReactDOM.render(
 
 renderApp()
 
-store.subscribe(renderApp)
+store.subscribe(() => {
+  saveState({login: store.getState().login})
+  renderApp()
+})
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

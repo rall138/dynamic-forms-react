@@ -12,7 +12,7 @@ td{
 }
 
 button.btn-danger, a.btn-danger {
-    background-color:#d62828 !important;
+    background-color:#DB3030 !important;
     border: none;
     font-family: monospace;
 }
@@ -88,7 +88,7 @@ button.btn-success:not(.button-link), a.btn-success{
 }
 
 .modal-header{
-    background-color:#d62828 !important;
+    background-color:#DB3030 !important;
     color: white;
     font-family: monospace;
 }
@@ -175,7 +175,7 @@ button.btn-success:not(.button-link), a.btn-success{
 }
 
 .login-login-text{
-    background-color: #d62828;
+    background-color: #DB3030;
     border-radius: 5px 5px 0px 0px;
     padding: 5px;
     color: white;
@@ -200,6 +200,19 @@ button.btn-success:not(.button-link), a.btn-success{
     border-radius: 20% 5px 20% 5px;
     opacity: 0.6;
     
+}
+
+.no-padding{
+    padding: 0px !important;
+}
+
+.gray-background{
+    background-color: #36383A !important;
+    color: white;
+}
+.black-background{
+    background-color: #25272B !important;
+    color: white;
 }
 
 .no-padding{
