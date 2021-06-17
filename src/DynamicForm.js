@@ -4,6 +4,7 @@ import { useRouteMatch } from 'react-router-dom'
 import axios from "axios"
 import {server_url, transactionMode} from './files/constantes'
 import './css/form.css'
+import {sleep} from './helpers/sleepHelper'
 
 const DynamicForm = (props) => {
 
@@ -71,10 +72,6 @@ const DynamicForm = (props) => {
       })
     }
 
-  }
-
-  const sleep = (ms) =>{
-    return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   useEffect(()=>{

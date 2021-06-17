@@ -31,15 +31,22 @@ const Properties = (props) => {
 
   useEffect(()=>{
     if(props.field !== undefined)
-      setField(props.field)
-  })
+      setField({...props.field})
+  }, [props.field])
+
 
   useEffect(() => {
     let index = -1
+    if (field === undefined || field.id === undefined){
+      for(let i = 0; i < attributes.length; i++){
+        attributes[i].value = null
+      }
+    }
+
     for(let property_name in field){
       index = returnPropertyIndex(property_name)
       if (index > -1)
-        attributes[index].value = field[property_name] // field[description]
+      attributes[index].value = field[property_name] // field[description]
     }
     setAttributes([...attributes])
   }, [field])

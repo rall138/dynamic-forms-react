@@ -1,7 +1,8 @@
-import React, {useState, useRef} from 'react'
-import { Container, Row, Col, Form, Button, Overlay, Popover } from 'react-bootstrap'
+import React, {useState, useRef, useEffect} from 'react'
+import { Container, Row, Col, Form, Button, Overlay, Popover, Alert } from 'react-bootstrap'
 import profile_img from './files/profile.jpg'
 import { useDispatch } from 'react-redux'
+import { sleep } from './helpers/sleepHelper'
 
 const ProfilePicture = (props) => {
     const ref = useRef(null);
@@ -33,12 +34,21 @@ const Login = () => {
 
     const [userName, setUserName] = useState()
     const [userPwd, setUserPwd] = useState()
-    const [message, setMessage] = useState({message: '', variant:''})
+    const [message, setMessage] = useState(undefined)
     const [show, setShow] = useState(false);
     const [target, setTarget] = useState(null);
     const [linkText, setLinkText] = useState("Click me!")
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if(message !== undefined){
+            sleep(2500).then(()=>{
+                setMessage()
+            })
+        }
+
+    }, [message])
 
     const handleClick = (event) => {
         setShow(!show);
@@ -70,14 +80,13 @@ const Login = () => {
     
     }
 
-    const sleep = (ms) =>{
-        return new Promise(resolve => setTimeout(resolve, ms))
-    }
-
     return(
         <div>
 
             <ProfilePicture target={target} show={show} />
+
+            {message !== undefined ? 
+            <Alert transition={false} variant={message.variant}>{message.message}</Alert> : '' }
 
             <Container>
 

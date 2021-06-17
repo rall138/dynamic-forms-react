@@ -84,8 +84,6 @@ const SectionBody = (props) => {
 
   const redefineRows = (fields) => {
     
-    fields = fields.filter(field =>(field.action !== 'delete'))
-
     let index = 0, row_count = 0, field_count = 0;
     let section_array = []
     let rows = []
@@ -115,36 +113,6 @@ const SectionBody = (props) => {
     
   }
 
-  // Manejamos una coleccion aparte para los elementos que se pretenden eliminar
-  const deleteField = (fieldToDelete) => {
-    let field = fields.filter(field =>(field.id === fieldToDelete.id))[0]
-    field.action = 'delete'
-
-    deletedEditableFields.push({...field})
-    setDeletedEditableFields(deletedEditableFields)
-    
-    fields[fields.indexOf(field)] = field
-    redefineRows(fields)
-
-    props.callbackDeleteItem(fieldToDelete)
-  }
-
-  const addField = () => {
-    let tempFields = [...fields]
-    
-    // copiamos el esqueleto de las propiedades
-    let newField = {}
-    ScheletonProps.map(scheletonProp => {
-      newField[scheletonProp.description] = scheletonProp.value
-    })
-    
-    //newField.id =  fields.length > 0 ? fields[fields.length -1].id + 1 : 1
-    tempFields.push(newField)
-    redefineRows(tempFields)
-
-    props.callbackNewItem(newField)
-  }
-
   return (
     <div style={styles.tableWrapper}>
 
@@ -164,9 +132,9 @@ const SectionBody = (props) => {
                       <EditableFields 
                       key={field.id}
                       field={field} 
-                      handleAdd={() => addField()}
+                      handleAdd={() => props.callbackNewItem({})}
                       handleClick={() => props.callbackUpdateItem(field)} 
-                      handleDeleteField={(field) => deleteField(field)}/>
+                      handleDeleteField={(field) => props.callbackDeleteItem(field)}/>
                     </Col>
                   )
                 })}

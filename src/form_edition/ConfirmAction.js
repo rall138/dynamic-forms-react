@@ -16,8 +16,8 @@ const ConfirmAction = (props) => {
             </Modal.Body>
             <div className="button-group-container">
                 <div className="button-group margin-right-bottom-5">
-                    <Button className="" onClick={()=>props.onHideConfirm({message:'canceled'})} variant='danger'>Cancel</Button>
-                    <Button className="" onClick={()=>props.onHideConfirm({message:'confirmed'})} variant='success'>Confirm</Button>
+                    <Button className="" onClick={()=>props.onHideConfirm({message:'Operation Cancelled'})} variant='danger'>Cancel</Button>
+                    <Button className="" onClick={()=>props.onHideConfirm({message:'Operation Confirmed'})} variant='success'>Confirm</Button>
                 </div>
             </div>
         </Modal>

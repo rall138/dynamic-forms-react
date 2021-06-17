@@ -6,6 +6,7 @@ import ConfirmAction from "./form_edition/ConfirmAction"
 import { useRouteMatch } from 'react-router-dom'
 import {server_url, transactionMode} from './files/constantes'
 import axios from "axios"
+import { sleep } from './helpers/sleepHelper'
 
 const ToolsAndProperties = () =>  {
 
@@ -51,10 +52,6 @@ const ToolsAndProperties = () =>  {
   }, [mode])
 
 
-  const sleep = (ms) =>{
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }
-
   useEffect(()=>{
     if(message !== undefined && message.message === 'operation succeded'){
       setParentId({...parentId})
@@ -67,7 +64,7 @@ const ToolsAndProperties = () =>  {
 
   const handleOnHide = (message) =>{
 
-    if(mode === transactionMode.DELETE && message.message === 'confirmed'){
+    if(mode === transactionMode.DELETE && message.message === 'Operation Confirmed'){
       axios({
         url: server_url+'forms/'+parentId.form_id+'/sections/'+parentId.section_id+'/fields/'+field.id,
         method:'delete',
@@ -83,7 +80,7 @@ const ToolsAndProperties = () =>  {
       .catch(err => {console.log(err)
         setMessage({message:err.message, variant:'danger'})
       })
-    }else{
+    }else if (message.message !== 'Operation Cancelled'){
       setMessage(message)
     }
     setField(undefined)
@@ -96,13 +93,13 @@ const ToolsAndProperties = () =>  {
         <Col lg="2"></Col>
         <Col lg="8">
 
-          {message !== undefined && message.message !== undefined && message.message !== '' ? 
-          <Alert key={'msg_1'} variant={message.variant}>{message.message}</Alert>:''}
+          { message !== undefined && message.message !== undefined && message.message !== '' ? 
+          <Alert key={'msg_1'} transition={false} variant="info">{message.message}</Alert> : '' }
 
           <EditableBody 
-            callbackUpdateItem={(field)=>handleUpdateItem(field)}
-            callbackNewItem={(field) =>handleNewItem(field)}
-            callbackDeleteItem={(field) =>handleDeleteItem(field)}
+            callbackUpdateItem={(parmField)=>handleUpdateItem(parmField)}
+            callbackNewItem={(parmField) =>handleNewItem(parmField)}
+            callbackDeleteItem={(parmField) =>handleDeleteItem(parmField)}
             parent_id={parentId} />
 
         </Col>

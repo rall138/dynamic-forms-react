@@ -3,6 +3,7 @@ import axios from 'axios'
 import {Alert, Button, Table } from "react-bootstrap"
 import './css/tablegrid.css'
 import {server_url} from './files/constantes'
+import {sleep} from './helpers/sleepHelper'
 
 const styles = {
   buttonContainer:{
@@ -34,10 +35,6 @@ const DynamicForms = () => {
     }).catch(error => (console.log(error)))
 
   }, [])
-
-  const sleep = (ms) =>{
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }
 
   useEffect(()=>{
     if(message !== undefined){
