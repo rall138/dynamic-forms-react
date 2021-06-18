@@ -30,9 +30,9 @@ If you create a new form or just update an existing one you will see the next pa
 
 Now when you clicked at <i>Sections Tab</i> and you decide to add a new <i>Section</i>
 
-![02 form](https://user-images.githubusercontent.com/10009918/122458552-52674900-cf86-11eb-93f1-bdcb1deed62c.png)
+![02 form](https://user-images.githubusercontent.com/10009918/122572662-55187b80-d024-11eb-82c6-5834260a83d1.png)
 
-![03 form](https://user-images.githubusercontent.com/10009918/122458745-86426e80-cf86-11eb-812c-036d1e8f5dfd.png)
+![03 form](https://user-images.githubusercontent.com/10009918/122572889-914bdc00-d024-11eb-99bd-1c3b841193b0.png)
 
 Is not only responsible it also re-arranges the visual as you see below
 
