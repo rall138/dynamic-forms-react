@@ -59,7 +59,7 @@ And this is how you delete one
 </span>
 
 <span>
-  The backend of this project is created with Ruby on rails, at the begining i use rails-react gem to build the whole project, but then i decide to separate 
+  The backend of this project is created with Ruby on rails, at the beginning i use rails-react gem to build the whole project, but then i decided to separate 
   react and leave rails as a rest api only.
 </span>
 :pushpin::pushpin::pushpin:
