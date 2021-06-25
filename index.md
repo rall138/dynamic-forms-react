@@ -20,7 +20,7 @@ My profile picture displayed
 
 ![02 Login](https://user-images.githubusercontent.com/10009918/122457601-331bec00-cf85-11eb-9c3b-2626a8b1a41c.png)
 
-Once you log in! (A header for logout is displayed and you go directly to the forms part)
+Once you logged in! (A header for logout is displayed and you go directly to the forms part)
 
 ![01 forms](https://user-images.githubusercontent.com/10009918/122457990-ad4c7080-cf85-11eb-8602-e2d98e2d1e92.png)
 
