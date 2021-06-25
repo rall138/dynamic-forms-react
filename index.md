@@ -20,7 +20,7 @@ My profile picture displayed
 
 ![02 Login](https://user-images.githubusercontent.com/10009918/122457601-331bec00-cf85-11eb-9c3b-2626a8b1a41c.png)
 
-Once you logged in! (A header for logout is displayed and you go directly to the forms part)
+Once you logged in! (A header for logout is displayed and you are redirected to forms page)
 
 ![01 forms](https://user-images.githubusercontent.com/10009918/122457990-ad4c7080-cf85-11eb-8602-e2d98e2d1e92.png)
 
@@ -28,7 +28,7 @@ If you create a new form or just update an existing one you will see the next pa
 
 ![01 form](https://user-images.githubusercontent.com/10009918/122458285-074d3600-cf86-11eb-853a-c3f19c358854.png)
 
-Now when you clicked at <i>Sections Tab</i> and you decide to add a new <i>Section</i>
+Once you clicked at <i>Sections Tab</i> and you want to add a new one
 
 ![02 form](https://user-images.githubusercontent.com/10009918/122572662-55187b80-d024-11eb-82c6-5834260a83d1.png)
 
@@ -38,7 +38,7 @@ Is not only responsible it also re-arranges the visual as you see below
 
 ![04 form](https://user-images.githubusercontent.com/10009918/122459086-e20cf780-cf86-11eb-98bb-7ed3a6337f63.png)
 
-When clicking update link at the section --> 
+When clicking update's link at the section --> 
 
 ![01 field](https://user-images.githubusercontent.com/10009918/122459302-28faed00-cf87-11eb-82d2-44f45332dbef.png)
 
