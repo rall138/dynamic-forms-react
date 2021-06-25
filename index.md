@@ -46,7 +46,7 @@ When you add or update an existing field
 
 ![02 field](https://user-images.githubusercontent.com/10009918/122459359-39ab6300-cf87-11eb-9474-cae54b2e7109.png)
 
-And this is when you try to delete one
+And this is how you delete one
 
 ![03 field](https://user-images.githubusercontent.com/10009918/122459446-53e54100-cf87-11eb-9aba-7e7c847817d5.png)
 
